@@ -1,0 +1,64 @@
+/* Strings: salary templates + overtime exchange. */
+(function (BS) {
+  const D = BS.D;
+  D('p.tab.slips', '工资单', 'Payslips'); D('p.tab.tpl', '薪资模板', 'Salary templates');
+  D('p.title', '薪资模板', 'Salary templates'); D('p.sub', '管理日薪、月薪模板，按四类日期配置基础时长、加班时长与薪资倍数', 'Manage daily and monthly templates with base hours, overtime hours and multipliers for four day types');
+  D('p.export', '导出', 'Export'); D('p.new', '新增薪资模板', 'New template'); D('p.f.name', '模板名称', 'Template name');
+  D('p.col.name', '模板名称', 'Template'); D('p.col.linked', '关联人员', 'Linked staff'); D('p.col.type', '模板类型', 'Type'); D('p.col.base', '基础标准', 'Base'); D('p.col.rule', '加班规则', 'Overtime rule'); D('p.col.status', '状态', 'Status');
+  D('p.type.daily', '日薪', 'Daily'); D('p.type.monthly', '月薪', 'Monthly'); D('p.on', '启用', 'Active'); D('p.off', '停用', 'Inactive');
+  D('p.people', '{n} 人', '{n} staff'); D('p.base.daily', '日薪 / {h}h（金额在人员绑定时填写）', 'Daily / {h}h (rate set per person)'); D('p.base.monthly', '月薪 {v}', 'Monthly {v}');
+  D('p.rule.leave', '加班兑换休假时间（不计工资）', 'Overtime → time off (unpaid)'); D('p.rule.pay', '工作日×{a} · 周六×{b} · 周日×{c}', 'Weekday ×{a} · Sat ×{b} · Sun ×{c}');
+  D('p.rule.fixed', '固定加班时薪 {v}/小时', 'Fixed overtime {v}/h'); D('p.rule.gate', '达标后解锁全部加班', 'Unlocked after the hours threshold');
+  D('p.import', '导入人员', 'Import staff'); D('p.edit', '编辑', 'Edit'); D('p.del', '删除', 'Delete'); D('p.none', '没有符合条件的模板', 'No templates match the filters');
+  D('p.count', '共 {n} 条 {p} / {pages}', '{n} total · {p} / {pages}');
+  D('p.toast.inert', '原型提示：此功能不在本次演示范围内', 'Prototype: this action is not part of the demo');
+
+  D('p.day.weekday', '周一至周五', 'Mon – Fri'); D('p.day.sat', '周六', 'Saturday'); D('p.day.sun', '周日', 'Sunday'); D('p.day.special', '特殊日期', 'Special date');
+  D('p.mode.pay', '工资', 'Pay'); D('p.mode.leave', '休假时间', 'Time off');
+  D('p.mode.hint.pay', '选择工资时，加班时长按对应薪资倍数结算。', 'With Pay, overtime hours are paid at the multiplier for that day type.');
+  D('p.mode.hint.leave', '选择休假时间时，加班时长将计入可用休假时间。', 'With Time off, overtime hours are added to the employee’s available leave time.');
+
+  D('p.m.new', '新增薪资模板', 'New salary template'); D('p.m.edit', '编辑薪资模板', 'Edit salary template'); D('p.m.sub', '请核对填写内容后提交', 'Please review before submitting');
+  D('p.m.nameZh', '模板名称（中文）', 'Template name (Chinese)'); D('p.m.nameZhPh', '请输入中文名称', 'Enter the Chinese name'); D('p.m.nameEn', '模板名称（英文）', 'Template name (English)');
+  D('p.m.type', '模板类型', 'Template type'); D('p.m.salary', '人员基本薪资', 'Base pay'); D('p.m.byBinding', '人员绑定时填写', 'Set when binding staff');
+  D('p.m.std', '时薪折算标准工时（小时）', 'Standard hours for hourly rate'); D('p.m.hours', '小时', 'h'); D('p.m.formula', '基础时薪 = 人员日薪 ÷ 时薪折算标准工时；日薪金额在人员绑定模板时填写。', 'Hourly rate = daily rate ÷ standard hours. The daily rate is entered when binding staff to the template.');
+  D('p.m.exchange', '加班兑换方式', 'Overtime exchange');
+  D('p.m.basic', '人员基本薪资', 'Base salary'); D('p.m.perMonth', '/ 月', '/ month'); D('p.m.threshold', '月度工时门槛', 'Monthly hours threshold'); D('p.m.extra', '额外加班时薪（选填）', 'Extra overtime rate (optional)'); D('p.m.perHour', '/ 时', '/ h');
+  D('p.m.monthlyHint', '月中加班显示“待达到门槛”，月末统一结算。', 'Mid-month overtime shows “threshold pending” and is settled at month end.');
+  D('p.m.monthlyNoLeave', '月薪模板的加班按月结算为工资，暂不支持兑换休假时间。', 'Monthly templates always pay overtime; exchanging it for time off is not supported.');
+  D('p.m.rules', '工作日计薪规则', 'Day-type rules'); D('p.m.rulesHint', '各类日期的基础时长、加班时长及薪资倍数均可独立设置。', 'Base hours, overtime hours and multiplier can be set independently per day type.');
+  D('p.m.rulesHintLeave', '各类日期的基础时长与加班时长均可独立设置。', 'Base hours and overtime hours can be set independently per day type.');
+  D('p.m.dayCat', '日期类别', 'Day type'); D('p.m.col.base', '基础时长（小时）', 'Base hours'); D('p.m.col.ot', '加班时长（小时）', 'Overtime hours'); D('p.m.col.mult', '加班薪资倍数', 'Overtime multiplier');
+  D('p.m.optional', '选填', 'optional'); D('p.m.times', '倍', '×');
+  D('p.m.specialHint', '特殊日期匹配考勤组的指定日期，优先使用本行计薪配置。留空则不启用。', 'Special dates match the attendance group’s designated dates and take priority. Leave blank to disable.');
+  D('p.m.notePay', '内部保留4位小数；工资单最终保留2位；全部项目合计后统一四舍五入。锁定后只能补发或扣回差额。', 'Kept to 4 decimals internally; payslips show 2, rounded once after all items are totalled. After locking, only top-ups or clawbacks are possible.');
+  D('p.m.noteLeave', '选择休假时间时，加班时长不计入工资金额；工资单仅结算基础工时对应薪资，最终保留2位小数并统一四舍五入。锁定后只能补发或扣回差额。', 'With Time off, overtime hours are not paid; payslips only settle base hours, rounded to 2 decimals once. After locking, only top-ups or clawbacks are possible.');
+  D('p.m.save', '保存', 'Save'); D('p.m.create', '确认', 'Create');
+  D('p.e.name', '请输入中文名称', 'Enter the Chinese name'); D('p.e.nameEn', '请输入英文名称', 'Enter the English name'); D('p.e.std', '标准工时须大于 0 且不超过 24', 'Standard hours must be above 0 and at most 24');
+  D('p.e.salary', '请输入有效的月薪（0–100,000）', 'Enter a valid monthly salary (0–100,000)'); D('p.e.threshold', '门槛须为 1–744 的整数', 'Threshold must be a whole number from 1 to 744'); D('p.e.extra', '请输入有效的时薪，或留空', 'Enter a valid hourly rate, or leave blank');
+  D('p.e.hours', '基础与加班时长须为 0–24 的数字', 'Base and overtime hours must be numbers from 0 to 24'); D('p.e.sum', '基础时长 + 加班时长不能超过 24 小时', 'Base + overtime hours cannot exceed 24'); D('p.e.mult', '倍数须在 1.0–5.0 之间', 'Multiplier must be between 1.0 and 5.0');
+  D('p.toast.saved', '已保存模板「{name}」', 'Saved template “{name}”'); D('p.toast.created', '已创建模板「{name}」', 'Created template “{name}”'); D('p.toast.deleted', '已删除模板', 'Template deleted');
+  D('p.c.title', '确认切换加班兑换方式？', 'Change overtime exchange?'); D('p.c.msg', '此模板关联 {n} 人，将从「{from}」切换为「{to}」。', 'This template has {n} staff; switching from “{from}” to “{to}”.');
+  D('p.c.toLeave', '之后的加班将不再计入工资，而是累计为调休小时。已锁定的工资单不受影响。', 'From now on overtime is no longer paid but accrues as time-off hours. Locked payslips are unaffected.');
+  D('p.c.toPay', '之后的加班将按倍数计入工资。已累计的调休小时保留，不会自动转为工资。', 'From now on overtime is paid at the multiplier. Time-off hours already accrued are kept, not converted to pay.');
+  D('p.c.ok', '确认切换', 'Switch');
+  D('p.d.title', '删除薪资模板', 'Delete template'); D('p.d.msg', '确定删除「{name}」？此操作不可恢复。', 'Delete “{name}”? This cannot be undone.');
+  D('p.d.blocked', '「{name}」仍关联 {n} 人，请先解除关联后再删除。', '“{name}” still has {n} staff linked. Unlink them before deleting.'); D('p.d.ok', '确认删除', 'Delete');
+
+  D('p.ot.open', '登记加班（演示）', 'Log overtime (demo)'); D('p.demo', '演示', 'demo');
+  D('p.ot.title', '登记加班', 'Log overtime'); D('p.ot.sub', '按员工绑定的薪资模板试算：计入工资，或兑换为调休。', 'Calculated with the employee’s salary template: paid, or exchanged for time off.');
+  D('p.ot.emp', '员工', 'Employee'); D('p.ot.date', '日期', 'Date'); D('p.ot.worked', '当日实际工时', 'Hours worked that day'); D('p.ot.special', '该日属于考勤组的特殊日期', 'This date is a special date in the attendance group');
+  D('p.ot.fill', '请填写日期和工时（0–24）。', 'Enter a date and hours worked (0–24).');
+  D('p.ot.monthly', '「{name}」为月薪模板：加班须达到 {h} 小时门槛后在月末统一结算，不支持兑换休假。', '“{name}” is a monthly template: overtime is settled at month end after the {h}-hour threshold; no time-off exchange.');
+  D('p.ot.missing', '未找到该员工的薪资模板。', 'No salary template found for this employee.');
+  D('p.ot.rule', '基础 {b}h + 加班 {o}h', 'base {b}h + overtime {o}h'); D('p.ot.noSpecial', '此模板未配置特殊日期，已按普通日期计算。', 'No special-date row is configured; calculated as a regular day.');
+  D('p.ot.base', '基础工时 {h} 小时', 'Base hours: {h}'); D('p.ot.otLeave', '加班工时 {h} 小时（兑换休假，不计工资）', 'Overtime: {h}h (time off, unpaid)'); D('p.ot.otPay', '加班工时 {h} 小时 × {m} 倍', 'Overtime: {h}h × {m}');
+  D('p.ot.excess', '超出配置的 {h} 小时不计入', '{h}h beyond the configured hours is not counted');
+  D('p.ot.total', '本日计入工资', 'Added to payslip'); D('p.ot.round', '内部 4 位小数，工资单 2 位', '4 decimals internally, 2 on the payslip'); D('p.ot.toilBal', '调休余额', 'Time-off balance');
+  D('p.ot.confirm', '确认登记', 'Log it'); D('p.ot.e.input', '请填写有效的日期和工时', 'Enter a valid date and hours'); D('p.ot.e.monthly', '月薪模板不支持在此登记', 'Monthly templates cannot be logged here');
+  D('p.ot.e.none', '当日没有可兑换的加班时长', 'No overtime hours to exchange on that day'); D('p.ot.e.fail', '登记失败', 'Could not log overtime');
+  D('p.toast.toil', '已为 {name} 计入调休 +{h} 小时', 'Added {h}h of time off to {name}'); D('p.toast.pay', '已登记 {name} 的加班：当日计入工资 {v}（演示）', 'Logged overtime for {name}: {v} added to pay (demo)');
+  D('p.ledger', '最近加班登记', 'Recent overtime entries'); D('p.ledger.none', '暂无登记。点击「登记加班（演示）」体验兑换流程。', 'Nothing yet. Use “Log overtime (demo)” to try the exchange.');
+  D('p.lg.at', '登记时间', 'Logged'); D('p.lg.emp', '员工', 'Employee'); D('p.lg.date', '日期', 'Date'); D('p.lg.day', '日期类别', 'Day type'); D('p.lg.worked', '工时', 'Hours'); D('p.lg.result', '结果', 'Result');
+  D('p.lg.toil', '调休 +{h} 小时', 'Time off +{h}h'); D('p.lg.pay', '加班工资 {v}', 'Overtime pay {v}');
+})(window.BS);

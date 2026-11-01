@@ -1,0 +1,15 @@
+/* Deployments & compliance */
+.dp-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0 0 14px; }
+.dp-kpi { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; border: 1px solid var(--a-line); border-radius: 12px; background: #fff; border-left-width: 4px; }
+.dp-kpi b { font-size: 24px; color: var(--a-head); line-height: 1.1; } .dp-kpi span { color: var(--a-muted); font-size: 12px; }
+.dp-kpi.granted { border-left-color: #1f9d63; } .dp-kpi.blocked { border-left-color: #d64545; } .dp-kpi.requested { border-left-color: #e0a100; } .dp-kpi.active { border-left-color: var(--a-primary); }
+.dp-table td { vertical-align: top; } .dp-table th, .dp-table td { white-space: nowrap; } .dp-table td:nth-child(3) { white-space: normal; min-width: 150px; }
+.dp-reasons { margin: 0; padding: 0 0 0 16px; display: grid; gap: 2px; white-space: normal; } .dp-reasons li.bad { color: #b32d2d; } .dp-reasons li.warn { color: #9a6a00; }
+.dp-rules { padding: 16px 18px; margin-bottom: 14px; } .dp-h4 { margin: 14px 0 6px; font-size: 13px; color: var(--a-head); }
+.dp-rule { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--a-line); } .dp-rule .a-field.sm { width: auto; min-width: 200px; }
+.dp-days { display: inline-flex; gap: 8px; align-items: center; color: var(--a-muted); font-size: 12px; } .dp-days input { width: 72px; padding: 6px 8px; border: 1px solid var(--a-line); border-radius: 8px; font: inherit; }
+.dp-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.dp-permit { display: grid; gap: 6px; padding: 10px 0; border-bottom: 1px dashed var(--a-line); } .dp-permit .hr-chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.dp-log { margin: 0; padding: 0 0 0 18px; display: grid; gap: 6px; } .dp-log small { display: block; color: var(--a-muted); }
+.tn-mods { display: grid; gap: 6px; }
+.hr-cmp { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; padding: 1px 8px; border-radius: 999px; background: #fdecec; color: #b32d2d; font-size: 11px; font-weight: 600; vertical-align: middle; }

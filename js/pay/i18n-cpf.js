@@ -1,0 +1,34 @@
+/* Strings: CPF (公积金) deduction rules. */
+(function (BS) {
+  const D = BS.D;
+  D('p.tab.cpf', '公积金扣除规则', 'CPF deduction rules');
+  D('c.title', '公积金扣除规则', 'CPF deduction rules'); D('c.sub', '配置公民与永久居民的员工公积金扣除比例', 'Employee CPF deduction rates for citizens and permanent residents');
+  D('c.log', '调整记录', 'Adjustment log'); D('c.edit', '编辑规则', 'Edit rules'); D('c.g.citizen', '公民', 'Citizens'); D('c.g.pr', '永久居民', 'Permanent residents');
+  D('c.note.citizen', '仅持 NRIC 的公民和永久居民参与公积金扣除；本页只计算员工扣除部分。', 'Only NRIC holders (citizens and PRs) have CPF deducted; this page covers the employee share only.');
+  D('c.note.pr', '可勾选一条规则作为默认扣除规则；未勾选时，系统按员工实际 PR 年限与年龄匹配扣除比例。', 'Tick one rule as the default; if none is ticked, the rule is matched from the employee’s actual PR year and age.');
+  D('c.foot.citizen', '年龄根据出生日期自动计算，工资结算仅按员工扣除比例计算。', 'Age is calculated from date of birth; payroll uses the employee rate only.');
+  D('c.foot.pr', '第一年、第二年按取得PR日期计算；第三年起按年龄区间扣除。', 'Years one and two follow the PR start date; from year three the age band applies.');
+  D('c.col.stage', '永久居民阶段', 'PR stage'); D('c.col.band', '年龄区间', 'Age band'); D('c.col.rate', '员工扣除比例', 'Employee rate'); D('c.col.default', '默认', 'Default'); D('c.col.eff', '生效日期', 'Effective from');
+  D('c.stage.y1', 'PR第一年', 'PR year 1'); D('c.stage.y2', 'PR第二年', 'PR year 2'); D('c.stage.y3', 'PR第三年及以后', 'PR year 3 onwards');
+  D('c.band.all', '全部年龄', 'All ages'); D('c.band.le55', '55岁及以下', '55 and below'); D('c.band.55_60', '55岁以上至60岁', 'Above 55 to 60'); D('c.band.60_65', '60岁以上至65岁', 'Above 60 to 65'); D('c.band.65_70', '65岁以上至70岁', 'Above 65 to 70'); D('c.band.gt70', '70岁以上', 'Above 70');
+  D('c.pending', '{d} 起 {r}', '{r} from {d}'); D('c.count', '共 {n} 条', '{n} rules');
+  D('c.m.title', '手动修改公积金扣除规则', 'Edit CPF deduction rule manually'); D('c.m.sub', '修改后将应用于对应永久居民扣除规则', 'The change applies to this rule');
+  D('c.m.curRate', '当前比例', 'Current rate'); D('c.m.status', '当前状态', 'Status'); D('c.status.on', '生效', 'In effect'); D('c.m.setDefault', '设为默认扣除规则', 'Use as the default deduction rule');
+  D('c.m.defaultHint', '勾选后所有永久居民均按此规则扣除，不再按阶段与年龄匹配。', 'When ticked, every PR is deducted with this rule instead of being matched by stage and age.');
+  D('c.m.eff', '生效日期', 'Effective from'); D('c.m.effHint', '不得早于当前生效日期和本月 1 日；晚于今天则从该日起生效，之前仍用旧比例。', 'Not before the current effective date or the 1st of this month. A later date keeps the old rate until then.');
+  D('c.m.reason', '修改原因', 'Reason'); D('c.m.reasonDefault', '管理员手动调整', 'Manual adjustment by admin'); D('c.m.recordHint', '保存后生成一条手动调整记录', 'Saving creates a manual adjustment record'); D('c.m.save', '保存修改', 'Save changes');
+  D('c.e.rate', '请输入 0–50 之间的比例（最多两位小数）', 'Enter a rate from 0 to 50 (up to 2 decimals)'); D('c.e.effective', '请选择有效的生效日期', 'Choose a valid effective date');
+  D('c.e.before_cur', '生效日期不能早于当前版本的生效日期', 'Cannot be earlier than the version in force'); D('c.e.locked', '本月 1 日之前的月份已锁定，不能修改', 'Months before the 1st of this month are locked');
+  D('c.e.reason', '请填写修改原因', 'A reason is required'); D('c.e.reason_len', '修改原因最多 100 字', 'Reason is limited to 100 characters'); D('c.e.nochange', '没有任何改动', 'Nothing was changed'); D('c.e.missing', '规则不存在', 'Rule not found'); D('c.e.rowErrors', '部分比例无效，请检查标红的输入框', 'Some rates are invalid; check the highlighted fields');
+  D('c.bulk.hint', '同一生效日期与原因适用于本页所有被修改的比例。', 'The same effective date and reason apply to every changed rate on this tab.');
+  D('c.toast.saved', '已保存，并生成手动调整记录', 'Saved; an adjustment record was created'); D('c.toast.bulk', '已更新 {n} 条规则', 'Updated {n} rules'); D('c.toast.nochange', '没有任何改动', 'No changes'); D('c.toast.defOn', '已设为默认扣除规则', 'Set as the default rule'); D('c.toast.defOff', '已取消默认扣除规则', 'Default rule cleared');
+  D('c.reason.defOn', '设为默认扣除规则', 'Set as default rule'); D('c.reason.defOff', '取消默认扣除规则', 'Default rule cleared');
+  D('c.log.sub', '每次手动修改都会保留记录', 'Every manual change is kept'); D('c.log.none', '暂无调整记录', 'No adjustments yet'); D('c.log.rate', '比例调整', 'Rate change'); D('c.log.on', '设为默认', 'Set default'); D('c.log.off', '取消默认', 'Default cleared');
+  D('c.log.col.at', '时间', 'Time'); D('c.log.col.rule', '规则', 'Rule'); D('c.log.col.kind', '类型', 'Type'); D('c.log.col.change', '变更', 'Change'); D('c.log.col.eff', '生效日期', 'Effective'); D('c.log.col.by', '操作人', 'By'); D('c.log.col.reason', '原因', 'Reason');
+  D('c.calc.title', '公积金扣除试算', 'CPF deduction preview'); D('c.calc.sub', '按员工身份、年龄与 PR 取得日期匹配规则，仅计算员工扣除部分。', 'Matches a rule from the employee’s ID type, age and PR start date; employee share only.');
+  D('c.calc.month', '工资月份', 'Pay month'); D('c.calc.wage', '当月应发工资', 'Gross wage for the month'); D('c.calc.fill', '请选择月份并输入有效金额。', 'Choose a month and enter a valid amount.');
+  D('c.calc.noprofile', '该员工没有身份资料。', 'No ID profile for this employee.'); D('c.calc.fin', '持 FIN 的外籍员工不参与公积金扣除。', 'FIN holders (foreign workers) have no CPF deducted.');
+  D('c.id.citizen', '公民（NRIC）', 'Citizen (NRIC)'); D('c.id.pr', '永久居民（NRIC）', 'PR (NRIC)'); D('c.id.fin', '外籍（FIN）', 'Foreign (FIN)');
+  D('c.calc.age', '{n} 岁', 'Age {n}'); D('c.calc.prSince', 'PR 自 {d}，{s}', 'PR since {d} · {s}'); D('c.calc.rule', '匹配规则', 'Rule applied'); D('c.calc.viaDefault', '按默认规则', 'default rule'); D('c.calc.effFrom', '{d} 起', 'from {d}');
+  D('c.calc.gross', '应发工资', 'Gross wage'); D('c.calc.ded', '员工公积金扣除', 'Employee CPF'); D('c.calc.round', '内部 4 位小数，工资单 2 位', '4 decimals internally, 2 on the payslip'); D('c.calc.net', '扣除后工资', 'Wage after CPF');
+})(window.BS);

@@ -1,0 +1,14 @@
+/* Payslips */
+.a-tag.ps-u-pending { background: var(--a-warn-s); color: var(--a-warn); } .a-tag.ps-u-confirmed { background: var(--a-ok-s); color: var(--a-ok); } .a-tag.ps-u-disputed { background: var(--a-danger-s); color: var(--a-danger); }
+.a-tag.ps-p-unverified { background: #EEF0F6; color: var(--a-muted); } .a-tag.ps-p-verified { background: var(--a-primary-s); color: var(--a-primary); } .a-tag.ps-p-processing { background: var(--a-warn-s); color: var(--a-warn); } .a-tag.ps-p-payable { background: #E3F4FB; color: #137A93; } .a-tag.ps-p-paid { background: var(--a-ok-s); color: var(--a-ok); }
+.ps-cards { padding: 0 0 16px; } .ps-table td, .ps-table th { white-space: nowrap; }
+.ps-dl { margin: 0; display: grid; gap: 0; border: 1px solid var(--a-line); border-radius: 12px; overflow: hidden; } .ps-kv { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 10px 14px; border-bottom: 1px solid #EEF0F6; background: #fff; } .ps-kv:last-child { border-bottom: 0; } .ps-kv dt { color: var(--a-muted); } .ps-kv dd { margin: 0; color: var(--a-head); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.ps-kv.tot { background: #FAFBFF; } .ps-kv.big dd { font-size: 20px; color: var(--a-primary); } .ps-in { width: 150px; padding-inline: 8px; min-height: 34px; } .ps-in input { text-align: right; }
+.ps-st { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; } .ps-st small { color: var(--a-muted); margin-left: auto; }
+.ps-disp { background: var(--a-warn-s); color: #8a4a00; border-radius: 12px; padding: 12px 14px; } .ps-disp b { display: flex; gap: 6px; align-items: center; } .ps-disp p { margin: 6px 0 0; color: var(--a-text); } .ps-disp small { color: var(--a-muted); }
+.ps-amt { font-size: 28px; font-weight: 800; color: var(--a-head); margin: 4px 0 8px; font-family: var(--f-brand), var(--f-ui); } .ps-delta { margin: 0; font-weight: 700; color: var(--a-primary); }
+
+/* worker */
+.w-ps { padding-right: 36px; } .w-ps.locked { opacity: .85; background: #F4F5FA; } .w-pssub { margin: 0; color: var(--w-muted); font-size: 12px; }
+.w-ps-hero { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(160deg, #5058F2, #3E44D6); color: #fff; border-radius: 20px; padding: 18px; } .w-ps-hero small { opacity: .85; display: block; } .w-ps-hero b { font-size: 28px; font-variant-numeric: tabular-nums; } .w-ps-hero .w-tag { background: #ffffff2e; color: #fff; }
+.w-row b.amt.big { font-size: 18px; color: var(--w-primary); }

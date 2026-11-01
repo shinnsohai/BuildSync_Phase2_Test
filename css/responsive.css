@@ -1,0 +1,12 @@
+/* Dialogs: keep the header and the Cancel / Save footer on screen and scroll only the form between them. */
+.a-modal:has(> .a-mbody) { display: flex; flex-direction: column; overflow: hidden; }
+.a-modal:has(> .a-mbody) > header, .a-modal:has(> .a-mbody) > footer { flex: none; }
+.a-modal:has(> .a-mbody) > .a-mbody { flex: 1 1 auto; min-height: 0; overflow: auto; }
+
+/* Narrow-screen fixes found by measuring every admin page at 390, 768 and 1024 px (loaded last on purpose). */
+@media (max-width: 700px) {
+  .a-page { padding: 16px 14px 24px; }
+  .a-range { max-width: 100%; } .a-range input { width: auto; flex: 1 1 0; min-width: 0; }
+  .a-pager { flex-wrap: wrap; gap: 8px; } .a-pager nav { flex-wrap: wrap; }
+  .a-scrim { padding: 8px; } .a-modal footer { flex-wrap: wrap; }
+}

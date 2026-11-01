@@ -1,0 +1,8 @@
+/* System & third-party configuration */
+.sy-sum { max-width: 260px; overflow-wrap: anywhere; white-space: normal !important; } .sy-note { display: flex; gap: 8px; align-items: flex-start; margin: 14px 2px 0; }
+.sy-types { margin-bottom: 16px; padding: 16px 18px; } .sy-types h3 { margin: 0; font-size: 15px; color: var(--a-head); } .sy-types .a-fhint { margin: 2px 0 10px; }
+.sy-typegrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; } .sy-typegrid button { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 12px; border: 1px solid var(--a-line); border-radius: 12px; background: #fff; font: inherit; text-align: left; cursor: pointer; } .sy-typegrid button.on { border-color: var(--a-primary); background: var(--a-primary-s); } .sy-typegrid small { color: var(--a-muted); }
+
+/* phone */
+.w-set-row { display: flex !important; align-items: center; width: 100%; gap: 8px; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; } .w-set-row span { flex: 1; } .w-set-row small { color: var(--w-muted); }
+.w-hint { display: flex; gap: 12px; align-items: flex-start; background: var(--w-warn-s); margin-bottom: 14px; } .w-hint b { display: block; margin-bottom: 4px; color: var(--w-warn); } .w-hint .w-notice-body { font-size: 13px; }

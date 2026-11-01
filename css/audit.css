@@ -1,0 +1,2 @@
+/* Audit log */
+.au-time { white-space: nowrap; font-variant-numeric: tabular-nums; } .au-obj { min-width: 220px; white-space: normal !important; } .au-note { display: flex; gap: 8px; align-items: flex-start; margin: 14px 2px 0; }
