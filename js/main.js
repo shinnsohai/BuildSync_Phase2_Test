@@ -25,7 +25,7 @@
   function setView(v) { view = v; try { sessionStorage.setItem('bs_view', v); } catch (e) { /* ignore */ } document.body.dataset.view = v; shell(); fit(); }
   document.querySelectorAll('[data-v]').forEach((b) => b.addEventListener('click', () => setView(b.dataset.v)));
 
-  $('#reset').addEventListener('click', () => { BS.store.reset(); BS.hr.reset(); BS.leave.reset(); BS.leaveReq.reset(); BS.att.reset(); BS.pay.reset(); BS.cpf.reset(); BS.tenant.reset(); BS.payroll.reset(); BS.notice.reset(); BS.survey.reset(); BS.content.reset(); BS.sys.reset(); BS.perm.reset(); BS.comp.reset(); BS.dep.reset(); BS.ptw.reset(); BS.train.reset(); BS.wallet.reset(); BS.spin.reset(); BS.dorm.reset(); BS.bus.clearLog(); BS.audit.reset(); worker.reset(); admin.reset(); BS.toast(document.body, t('s.resetDone'), 'ok'); });
+  $('#reset').addEventListener('click', () => { BS.store.reset(); BS.hr.reset(); BS.leave.reset(); BS.leaveReq.reset(); BS.att.reset(); BS.pay.reset(); BS.cpf.reset(); BS.tenant.reset(); BS.payroll.reset(); BS.notice.reset(); BS.survey.reset(); BS.content.reset(); BS.sys.reset(); BS.perm.reset(); BS.comp.reset(); BS.dep.reset(); BS.ptw.reset(); BS.train.reset(); BS.wallet.reset(); BS.spin.reset(); BS.passport.reset(); BS.dorm.reset(); BS.bus.clearLog(); BS.audit.reset(); worker.reset(); admin.reset(); BS.toast(document.body, t('s.resetDone'), 'ok'); });
   BS.warnStorage = () => BS.toast(document.body, t('s.storageFull'), 'warn');
 
   // scale the phone to the available height

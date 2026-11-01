@@ -2,10 +2,11 @@
 (function (BS) {
   BS.registerAdmin({
     id: 'leave', nav: 'a.nav.leave', stores: [BS.leave, BS.leaveReq],
-    tabs: [{ id: 'approve', k: 'l.tab.approve' }, { id: 'rules', k: 'l.tab.rules', live: false }, { id: 'quota', k: 'l.tab.quota' }],
+    tabs: [{ id: 'approve', k: 'l.tab.approve' }, { id: 'check', k: 'l.tab.check' }, { id: 'rules', k: 'l.tab.rules', live: false }, { id: 'quota', k: 'l.tab.quota' }],
     create(ctx) {
-      const parts = { approve: BS.leaveParts.approve(ctx), quota: BS.leaveParts.quota(ctx) };
       let tab = 'approve';
+      const nav = { to(id) { tab = id; ctx.rerender(); } };
+      const parts = { approve: BS.leaveParts.approve(ctx), check: BS.leaveParts.check(ctx, nav), quota: BS.leaveParts.quota(ctx) };
       const cur = () => parts[tab];
       return {
         get tab() { return tab; },

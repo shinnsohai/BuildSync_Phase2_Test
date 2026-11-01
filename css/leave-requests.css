@@ -58,3 +58,19 @@
 .w-sup-foot { display: flex; justify-content: space-between; color: var(--w-muted); font-size: 12px; } .w-sup-foot em { font-style: normal; color: var(--w-primary); font-weight: 600; }
 .w-person { display: flex !important; align-items: center; gap: 12px; } .w-person > div { flex: 1; } .w-person small { display: block; color: var(--w-muted); }
 .w-foot.w-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Leave Check */
+.lc-banner { display: flex; gap: 10px; align-items: flex-start; margin: 0 0 14px; padding: 10px 14px; border: 1px dashed #b9bfe6; border-radius: 12px; background: #f3f4fc; color: #2a2f57; font-size: 12.5px; line-height: 1.55; } .lc-banner svg { flex: none; margin-top: 2px; color: #5058f2; }
+.lc-card { padding: 16px 18px; margin: 0 0 14px; display: grid; gap: 10px; } .lc-card[data-level="block"] { border-left: 4px solid #d64545; } .lc-card[data-level="warn"] { border-left: 4px solid #e0a100; } .lc-card[data-level="watch"], .lc-card[data-level="ok"] { border-left: 4px solid #1f9d63; }
+.lc-h { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; } .lc-h .mute { margin-top: 4px; font-size: 12.5px; } .lc-v { font-size: 12.5px; }
+.lc-sum { margin: 0; padding: 10px 12px; border-radius: 12px; background: var(--a-bg); font-size: 13px; line-height: 1.65; } .lc-ai { display: inline-flex; gap: 4px; align-items: center; margin-right: 6px; padding: 1px 8px; border-radius: 999px; background: #5058f2; color: #fff; font-size: 11px; font-weight: 700; }
+.lc-fl { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 12.5px; } .lc-f { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.lc-cands { display: grid; gap: 6px; font-size: 12.5px; } .lc-cands > div { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; } .lc-cands small.mute { min-width: 90px; }
+.lc-chip { display: inline-flex; gap: 6px; align-items: baseline; padding: 4px 10px; border: 1px solid #bfe6d2; border-radius: 999px; background: #e9f7f0; color: #14724a; font-weight: 600; } .lc-chip small { color: #4a8a6c; font-weight: 400; } .lc-none { display: inline-flex; gap: 4px; align-items: center; color: #8a6200; font-size: 12px; }
+.lc-qs { display: grid; gap: 8px; font-size: 12.5px; } .lc-q { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; padding: 8px 12px; border: 1px solid var(--a-line); border-radius: 12px; background: #fff; } .lc-q > span:first-child { flex: 1; min-width: 200px; }
+.lc-yn { display: inline-flex; border: 1px solid var(--a-line); border-radius: 999px; overflow: hidden; } .lc-yn button { padding: 4px 16px; border: 0; background: none; font: inherit; font-size: 12.5px; cursor: pointer; } .lc-yn button.on { background: #1f9d63; color: #fff; } .lc-yn button.on.no { background: #d64545; }
+.lc-foot { display: flex; gap: 10px; align-items: center; } .lc-json { margin: 0; max-height: 260px; overflow: auto; padding: 10px 12px; border-radius: 10px; background: #12162b; color: #e6e9ff; font: 11.5px/1.5 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-word; }
+
+/* Leave Check card on the phone */
+.w-lc { display: grid; gap: 6px; margin-top: 10px; border-left: 4px solid #1f9d63 !important; } .w-lc.warn { border-left-color: #e0a100 !important; } .w-lc.bad { border-left-color: #d64545 !important; } .w-lc p { margin: 0; font-size: 12.5px; line-height: 1.6; } .w-lc-adv { font-weight: 600; } .w-lc small { color: var(--w-muted); }
+.w-lc-h { display: flex; gap: 8px; align-items: center; } .w-lc-ai { display: inline-flex; gap: 3px; align-items: center; padding: 1px 8px; border-radius: 999px; background: #5058f2; color: #fff; font-size: 10.5px; font-weight: 700; }

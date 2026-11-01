@@ -51,6 +51,14 @@
   D('w.dm.ph.pending', '等宿舍确认', 'Waiting for the dormitory'); D('w.dm.ph.upcoming', '即将入住', 'Moving in soon'); D('w.dm.ph.active', '居住中', 'Living here');
   D('w.dm.room', '房间', 'Room'); D('w.dm.bed', '床位', 'Bed'); D('w.dm.from', '入住日期', 'From'); D('w.dm.pending', '待确认', 'to be confirmed'); D('w.dm.map', '宿舍与工地地图', 'Map of your dormitory and worksite');
   D('w.dm.site', '你的工地', 'Your worksite'); D('w.dm.nosite', '还没有分配工地', 'No worksite assigned yet'); D('w.dm.shuttle', '班车时间', 'Shuttle times'); D('w.dm.noShuttle', '这个宿舍没有直达你工地的班车。', 'No shuttle runs from this dormitory to your worksite.');
+  D('w.dm.sample', '示例数据：张强不是宿舍住客，这里用一张示例床位演示合住宿舍。', 'Sample data: Zhang Qiang does not live in a dormitory; a sample bed is used to show a shared room.');
+  D('w.dm.roommates', '同房室友', 'Room-mates'); D('w.dm.mixed', '{n} 家公司合住', '{n} companies share this room'); D('w.dm.sameCo', '同一家公司', 'Same company');
+  D('w.dm.roomFacts', '房间 {r} · {n} 张床 · {ac} · 空床 {e}', 'Room {r} · {n} beds · {ac} · {e} empty'); D('w.dm.ac', '冷气', 'air-con'); D('w.dm.fan', '风扇', 'fan');
+  D('w.dm.emptyBed', '空床', 'Empty bed'); D('w.dm.you', '我', 'you'); D('w.dm.since', '{d} 入住', 'since {d}'); D('w.dm.privacy', '室友只显示名字、公司、工种和入住日期；证件号、电话和住址不会显示。', 'Room-mates are shown by name, company, trade and move-in date only; ID numbers, phones and addresses are never shown.');
+  D('w.dm.rules', '合住须知', 'Shared-room rules'); D('w.dm.rule.quiet', '晚上 22:30 熄灯，请保持安静；上夜班的同事白天需要休息。', 'Lights out at 22:30 and keep it quiet; colleagues on night shift sleep in the day.');
+  D('w.dm.rule.cook', '房间内不能煮食或使用明火，请到公用厨房。', 'No cooking or open flame in the room; use the shared kitchen.'); D('w.dm.rule.clean', '各自保管好床位和柜子，每周轮流打扫房间。', 'Keep your bed and locker tidy; the room is cleaned in turns each week.');
+  D('w.dm.rule.visitors', '访客只能在访客区，不能带进房间。', 'Visitors stay in the visitor area, not in the room.'); D('w.dm.rule.key', '柜子钥匙遗失，请联系宿舍管理处。', 'If you lose a locker key, ask the dormitory office.');
+  D('w.dm.manager', '宿舍管理处', 'Dormitory office'); D('w.dm.hours', '服务时间 07:00–22:00（示意）', 'Open 07:00–22:00 (sample)');
   D('w.dm.rent', '月租', 'Monthly rent'); D('w.dm.deposit', '押金 {n}', 'Deposit {n}'); D('w.dm.ofwas', '外籍工人住宿登记编号：{r}', 'Foreign worker residence declaration: {r}'); D('w.dm.leg.dorm', '我的宿舍', 'My dormitory');
 
 })(window.BS);

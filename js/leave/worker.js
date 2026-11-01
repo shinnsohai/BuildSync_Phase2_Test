@@ -152,6 +152,13 @@
             : html`<div class="w-empty">${icon('check', 36)}<p>${t('w.lv.supNone')}</p></div>`}
         </div>`;
     }
+    /** Leave Check on the phone: the verdict, the reason, the findings and who could cover (the questions are on the admin tab) */
+    function checkCard(api, r) {
+      const { t, html, icon } = api; const chk = BS.leaveCheck; if (!chk) return ''; const a = chk.analyse(r.id); if (!a) return ''; const z = api.lang === 'zh'; const L = chk.lead(a, t, z);
+      const tone = { 0: 'ok', 1: 'ok', 2: 'warn', 3: 'bad' }[a.level]; const names = Object.entries(a.candidates).filter(([, l]) => l.length).map(([ro, l]) => `${t('lc.role.' + ro)}: ` + l.map((c) => { const e = BS.hr.emp(c.empNo); return e ? (z ? e.name : e.nameEn || e.name) : c.empNo; }).join('、'));
+      return html`<section class="w-card w-lc ${tone}" data-role="leave-check"><div class="w-lc-h"><span class="w-lc-ai">${icon('star', 12)} ${t('lc.ai')}</span><b>${L.title}</b></div><p>${L.sentence}</p><p class="w-lc-adv">${L.advice}</p>
+        ${names.length ? html`<small>${t('lc.cover')}: ${names.join(' · ')}</small>` : ''}<small class="w-lc-foot">${t('w.lc.more')}</small></section>`;
+    }
     function supDetail(api) {
       const { t, html, icon, header, fmt } = api; const r = req.get(api.cur().id);
       if (!r) return html`${header(t('w.lv.supDetTitle'))}<div class="w-body"><div class="w-empty"><p>${t('w.lv.missing')}</p></div></div>`;
@@ -169,6 +176,7 @@
             <div class="w-row"><span>${t('lv.d.dur')}</span><b>${req.dur(r.hours, api.lang, true)}</b></div>
             <div class="w-row"><span>${t('w.det.at')}</span><b>${fmt.dt(r.submittedAt)}</b></div>
             <div class="w-row"><span>${t('lv.d.reason')}</span><b class="note">${r.reason}</b></div></section>
+          ${s === 'pending' ? checkCard(api, r) : ''}
           ${s === 'pending' ? html`<div class="w-field ${A.supErr ? 'err' : ''}"><label for="lv-sc">${t('w.lv.opinion')} <i>${t('w.lv.opinionHint')}</i></label>
               <textarea id="lv-sc" class="w-input" data-lv="supText" rows="3" maxlength="200" placeholder="${t('w.lv.opinionPh')}">${A.supText}</textarea>${A.supErr ? html`<small class="w-err">${t(A.supErr.k, A.supErr.p)}</small>` : ''}</div>`
             : rv ? html`<section class="w-card w-list"><div class="w-row"><span>${t('w.det.result')}</span><b class="res ${s === 'rejected' ? 'rejected' : 'approved'}">${t('lv.st.' + s)}</b></div><div class="w-row"><span>${t('w.det.by')}</span><b>${byLabel(api, rv.by)}</b></div><div class="w-row"><span>${t('w.det.rat')}</span><b>${fmt.dt(rv.at)}</b></div><div class="w-row"><span>${t('w.det.comment')}</span><b>${rv.text || '—'}</b></div></section>

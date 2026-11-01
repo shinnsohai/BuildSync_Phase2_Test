@@ -51,7 +51,7 @@
 
     function tag(status) { return html`<span class="w-tag ${status}">${t('w.status.' + status)}</span>`; }
 
-    const LIVE = { 'w.tile.reimb': 'open-reimb', 'w.tile.leave': 'open-leave', 'w.tile.att': 'open-att-rec', 'w.tile.salary': 'open-pay', 'w.tile.cert': 'open-cert', 'w.tile.survey': 'open-sv', 'w.tile.wallet': 'open-wl', 'w.tile.train': 'open-trn', 'w.tile.dorm': 'open-dorm', 'w.tile.spin': 'open-spin' };
+    const LIVE = { 'w.tile.reimb': 'open-reimb', 'w.tile.leave': 'open-leave', 'w.tile.att': 'open-att-rec', 'w.tile.salary': 'open-pay', 'w.tile.cert': 'open-cert', 'w.tile.survey': 'open-sv', 'w.tile.wallet': 'open-wl', 'w.tile.train': 'open-trn', 'w.tile.dorm': 'open-dorm', 'w.tile.spin': 'open-spin', 'w.tile.profile': 'open-pass' };
     /** bottom tab bar shared by the home and attendance screens */
     function tabbar(active) {
       const tabs = [['home', 'w.tab.home', 'tab-home'], ['brief', 'w.tab.work', 'tab-home'], ['cal', 'w.tab.att', 'open-att'], ['mega', 'w.tab.bc', 'open-bc'], ['gear', 'w.tab.set', 'open-set']];

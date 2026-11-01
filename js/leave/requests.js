@@ -1,7 +1,7 @@
 /* Leave requests: apply → pending → approved / rejected / withdrawn. Approval consumes quota (see BS.leave.consume);
    cancelling an approved leave that hasn't started gives it back. */
 (function (BS) {
-  const KEY = 'bs_leave_req_proto_v1';
+  const KEY = 'bs_leave_req_proto_v2';
   const listeners = new Set();
   const emit = (e) => listeners.forEach((fn) => { try { fn(e); } catch (err) { console.error(err); } });
   const pad = (n) => String(n).padStart(2, '0');
@@ -68,6 +68,9 @@
       ['BS10110', 'sick', -2, '08:00', -2, '17:00', 'approved', -3, '同意，请做好工作交接。', { role: 'supervisor', name: 'Lim Wei Ming' }],
       ['BS10456', 'annual', -10, '08:00', -9, '17:00', 'approved', -14, '同意', ADM],
       ['SG-0312', 'annual', 12, '08:00', 13, '17:00', 'pending', -1],
+      ['BS10116', 'annual', 7, '08:00', 8, '17:00', 'pending', -1],
+      ['BS09872', 'annual', 4, '08:00', 5, '17:00', 'pending', -1],
+      ['BS10721', 'personal', 4, '08:00', 5, '17:00', 'pending', -1],
       ['SG-0312', 'sick', -12, '08:00', -12, '17:00', 'approved', -13, '同意', ADM],
       ['SG-0312', 'personal', -21, '14:00', -21, '17:00', 'rejected', -22, '项目当日人手不足，请调整日期。', SUP],
     ];
