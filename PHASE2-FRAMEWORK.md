@@ -12,7 +12,7 @@ Planning document. Phase 1 (manpower records + payroll) is the prototype in this
 | 3 Incentives | points ledger, cash and course credit, award / deduct / redeem / reverse, rate versions, worker phone wallet; credit pays for bookings; completed courses earn points and reverse corrective deductions | `js/wallet/` |
 | 4 Dormitory hub | five dormitories with modelled beds, filters, allocation, leases, address declaration with operator confirmation, standards | `js/dorm/` |
 
-**Wave 5 (map, built):** a shared map component (`js/map/`) and the dormitory map view. **Agreed on 1 Nov 2026; Waves 6 and 7 are built.** Added afterwards on request: *Leave Check* (AI-assisted crew coverage for the leave approver, simulated, `docs/LEAVE-CHECK-LLM.md`), a shared-room *My bed* on the phone, and the *Skill Passport* profile modelled on the EZJOB site (`docs/SKILL-PASSPORT-INTEGRATION.md`).
+**Wave 5 (map, built):** a shared map component (`js/map/`) and the dormitory map view. **Agreed on 1 Nov 2026; Waves 6 and 7 are built.** Added afterwards on request: *Leave Check* (AI-assisted crew coverage for the leave approver, simulated, `docs/LEAVE-CHECK-LLM.md`), a shared-room *My bed* on the phone, and the *Skill Passport* profile modelled on the EZJOB site (`docs/SKILL-PASSPORT-INTEGRATION.md`). **Wave 8: Site chat & Kanban** (`js/kchat/`, `docs/KANBAN-CHAT.md`): the WhatsApp-style site chat per attendance group, a simulated crawler that turns messages into Kanban cards, the daily EHS digest, and links to Permit to Work, the rewards wallet, Leave Check and the audit log.
 
 **Waves 6 and 7:**
 

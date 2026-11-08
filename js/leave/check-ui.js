@@ -34,7 +34,7 @@
       const L = chk.lead(a, t, z());
       return html`<article class="a-card lc-card" data-req="${r.id}" data-level="${a.levelName}" data-verdict="${a.verdict}">
         <header class="lc-h"><div><span class="a-tag ${r.status === 'pending' ? 'pending' : r.status === 'approved' ? 'approved' : 'withdrawn'}">${t('lv.st.' + r.status)}</span> <b>${nm(e)}</b> <span class="mute">${r.empNo} · ${t('l.type.' + r.type)}</span>
-            <div class="mute">${icon('cal', 12)} ${r.start.slice(5, 16).replace('T', ' ')} → ${r.end.slice(5, 16).replace('T', ' ')} · ${req.dur(r.hours, lang())} · ${icon('users', 12)} ${gName(a.group)}${a.roles.length ? ' · ' + a.roles.map(role).join('、') : ''}</div></div>
+            <div class="mute">${icon('cal', 12)} ${r.start.slice(5, 16).replace('T', ' ')} → ${r.end.slice(5, 16).replace('T', ' ')} · ${req.dur(r.hours, lang())} · ${icon('users', 12)} ${gName(a.group)}${a.roles.length ? ' · ' + a.roles.map(role).join('、') : ''}${a.openCards ? html` · <span class="lc-oc" data-role="open-cards">${icon('list', 12)} ${t('lc.cards', { n: a.openCards })}</span>` : ''}</div></div>
           <span class="a-tag lc-v ${tag[a.level]}">${L.title}</span></header>
         <p class="lc-sum"><span class="lc-ai">${icon('star', 13)} ${t('lc.ai')}</span> ${L.sentence} ${L.advice}</p>
         ${a.findings.length ? html`<ul class="lc-fl">${a.findings.map(line)}</ul>` : ''}

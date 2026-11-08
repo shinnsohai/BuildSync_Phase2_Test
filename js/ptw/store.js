@@ -52,8 +52,10 @@
     canOverride(p) { return !!(p.stop && p.stop.workers.length && p.stop.workers.every((w) => w.reasons.every((r) => r.kind === 'cert'))); },
     overrideActive(p) { const o = p.stop && p.stop.override; return !!o && o.date === today() && this.canOverride(p); },
     stopped(p) { return !!p.stop && !this.overrideActive(p); },
-    /** requested | rejected | cancelled | closed | stopped | ready | inprogress */
-    state(p) { if (!['approved', 'active'].includes(p.status)) return p.status; if (this.stopped(p)) return 'stopped'; return p.status === 'active' ? 'inprogress' : 'ready'; },
+    /** open Critical safety cards raised in the site chat at this permit's site: one hazard life cycle, so the card and the permit cannot disagree */
+    hold(p) { return BS.kchat && BS.kchat.permitHoldCards ? BS.kchat.permitHoldCards(p) : []; },
+    /** requested | rejected | cancelled | closed | stopped | hold | ready | inprogress */
+    state(p) { if (!['approved', 'active'].includes(p.status)) return p.status; if (this.stopped(p)) return 'stopped'; if (this.hold(p).length) return 'hold'; return p.status === 'active' ? 'inprogress' : 'ready'; },
 
     /** the check behind everything: each assigned worker against the compliance rules for this kind of work, their deployment on the site and the gate */
     check(p) {
@@ -84,7 +86,7 @@
     counts(list) {
       const open = list.filter((p) => OPEN.includes(p.status)); const st = list.map((p) => this.state(p));
       const bad = new Set(); list.filter((p) => ['approved', 'active'].includes(p.status) && p.stop).forEach((p) => p.stop.workers.forEach((w) => bad.add(w.empNo)));
-      return { open: open.length, stopped: st.filter((s) => s === 'stopped').length, inprogress: st.filter((s) => s === 'inprogress').length, ready: st.filter((s) => s === 'ready').length, requested: st.filter((s) => s === 'requested').length, closed: list.filter((p) => ['closed', 'cancelled', 'rejected'].includes(p.status)).length, badWorkers: bad.size };
+      return { open: open.length, hold: st.filter((s) => s === 'hold').length, stopped: st.filter((s) => s === 'stopped').length, inprogress: st.filter((s) => s === 'inprogress').length, ready: st.filter((s) => s === 'ready').length, requested: st.filter((s) => s === 'requested').length, closed: list.filter((p) => ['closed', 'cancelled', 'rejected'].includes(p.status)).length, badWorkers: bad.size };
     },
 
     // ---------- the hard stop ----------
@@ -145,6 +147,7 @@
     /** approving or starting needs everyone on the team to pass today's check: an unfit team cannot be waved through */
     approve(id, by) {
       const p = this.get(id); if (!p) return { ok: false, error: 'missing' }; if (p.status !== 'requested') return { ok: false, error: 'state', status: p.status };
+      if (this.hold(p).length) return { ok: false, error: 'hold', cards: this.hold(p).map((c) => c.id) };
       const res = this.check(p); if (!res.ok) return { ok: false, error: 'not_fit', workers: res.workers.filter((w) => !w.ok) };
       return this._move(id, ['requested'], 'approved', 'approved', by, '', (x) => { x.lastInspected = stamp(); });
     },
@@ -153,6 +156,7 @@
       const p = this.get(id); if (!p) return { ok: false, error: 'missing' }; if (p.status !== 'approved') return { ok: false, error: 'state', status: p.status };
       if (p.date > today()) return { ok: false, error: 'not_today' };
       if (this.stopped(p)) return { ok: false, error: 'stopped' };
+      if (this.hold(p).length) return { ok: false, error: 'hold', cards: this.hold(p).map((c) => c.id) };
       const res = this.check(p); if (!res.ok && !this.overrideActive(p)) return { ok: false, error: 'not_fit', workers: res.workers.filter((w) => !w.ok) };
       return this._move(id, ['approved'], 'active', 'started', by, '', (x) => { x.lastInspected = stamp(); });
     },

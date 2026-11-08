@@ -32,6 +32,7 @@
   V('decline', '建议婉拒', '顶班和改作业都不可行：建议婉拒，并请 {name} 改在 {dates}。', 'Suggest declining', 'Neither cover nor moving the work is possible: suggest declining and offering {name} {dates}.');
   V('declineNoDates', '建议婉拒', '顶班和改作业都不可行：建议婉拒，并请 {name} 另选日期。', 'Suggest declining', 'Neither cover nor moving the work is possible: suggest declining and asking {name} for other dates.');
   D('w.lc.more', '更多问题和理由见后台“请假核查”。最终由你决定。', 'More questions and reasons are in the admin Leave Check tab. The decision is yours.');
+  D('lc.cards', '群聊里有 {n} 张未解决的看板卡片', '{n} open cards in the crew chat');
   D('lc.showCtx', '查看 AI 收到的资料', 'See what the AI receives'); D('lc.hideCtx', '收起', 'Hide'); D('lc.goto', '去请假审批', 'Go to approvals');
   D('lc.rules', '各班组每天的最低人手', 'Minimum cover per crew, per day'); D('lc.rulesSub', '这些要求是示例：真实使用时由项目按施工计划设定。“关键”岗位人手不够时，助手会建议暂缓。', 'These requirements are samples; a project would set them from its work plan. When a “critical” role is short the assistant suggests holding.');
   D('lc.col.group', '班组', 'Crew'); D('lc.col.role', '岗位', 'Role'); D('lc.col.min', '每天至少', 'Minimum a day'); D('lc.col.have', '现有', 'On the crew'); D('lc.col.work', '依赖这个岗位的工作', 'Work that depends on it'); D('lc.people', '人', 'people'); D('lc.critical', '关键', 'critical');

@@ -4,7 +4,7 @@
   const pm = BS.perm, hr = BS.hr;
   const download = (name, text) => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/csv' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
   const csvOf = (rows) => rows.map((r) => r.map((v) => (/[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : v)).join(',')).join('\r\n');
-  const SUBS = { stats: 'pg.stats', people: 'pg.people', prj: 'pg.prj', co: 'pg.co', cert: 'pg.cert', att: 'pg.att', pay: 'pg.pay', leave: 'pg.leave', notice: 'pg.notice', survey: 'pg.survey', content: 'pg.content', audit: 'pg.audit', perm: 'pg.perm', tenant: 'pg.tenant', reimb: 'pg.reimb', sys: 'pg.sys', dep: 'pg.dep', ptw: 'pg.ptw', train: 'pg.train', wallet: 'pg.wallet', dorm: 'pg.dorm', spin: 'pg.spin' };
+  const SUBS = { stats: 'pg.stats', people: 'pg.people', prj: 'pg.prj', co: 'pg.co', cert: 'pg.cert', att: 'pg.att', pay: 'pg.pay', leave: 'pg.leave', notice: 'pg.notice', survey: 'pg.survey', content: 'pg.content', audit: 'pg.audit', perm: 'pg.perm', tenant: 'pg.tenant', reimb: 'pg.reimb', sys: 'pg.sys', dep: 'pg.dep', ptw: 'pg.ptw', train: 'pg.train', wallet: 'pg.wallet', dorm: 'pg.dorm', spin: 'pg.spin', kchat: 'pg.kchat' };
   const NAVK = Object.fromEntries(Object.entries(pm.NAV_TO_PAGE).map(([k, v]) => [v, k]));
 
   BS.registerAdmin({

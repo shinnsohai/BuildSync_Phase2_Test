@@ -1,6 +1,6 @@
 /* Permissions: admin roles (pages, operations, data scope), admin accounts, and the signed-in administrator the dashboard checks against. */
 (function (BS) {
-  const KEY = 'bs_perm_proto_v8';
+  const KEY = 'bs_perm_proto_v9';
   const listeners = new Set();
   let version = 0;
   const emit = (e) => { version++; listeners.forEach((fn) => { try { fn(e); } catch (err) { console.error(err); } }); };
@@ -18,10 +18,11 @@
     ['dep', ['view', 'create', 'update', 'delete', 'export', 'approve']], ['ptw', ['view', 'create', 'update', 'delete', 'export', 'approve']],
     ['train', ['view', 'create', 'update', 'delete', 'export', 'approve']], ['wallet', ['view', 'create', 'update', 'export', 'approve']],
     ['dorm', ['view', 'create', 'update', 'export', 'approve']], ['spin', ['view', 'create', 'update', 'export', 'approve']],
+    ['kchat', ['view', 'create', 'update', 'delete', 'export', 'approve']],
   ].map(([id, ops]) => ({ id, ops }));
-  const NAV_TO_PAGE = { 'a.nav.stats': 'stats', 'a.nav.people': 'people', 'a.nav.projects': 'prj', 'a.nav.clients': 'co', 'a.nav.certs': 'cert', 'a.nav.att': 'att', 'a.nav.pay': 'pay', 'a.nav.leave': 'leave', 'a.nav.notice': 'notice', 'a.nav.survey': 'survey', 'a.nav.content': 'content', 'a.nav.audit': 'audit', 'a.nav.perm': 'perm', 'a.nav.tenant': 'tenant', 'a.nav.reimb': 'reimb', 'a.nav.sys': 'sys', 'a.nav.dep': 'dep', 'a.nav.ptw': 'ptw', 'a.nav.train': 'train', 'a.nav.wallet': 'wallet', 'a.nav.dorm': 'dorm', 'a.nav.spin': 'spin' };
+  const NAV_TO_PAGE = { 'a.nav.stats': 'stats', 'a.nav.people': 'people', 'a.nav.projects': 'prj', 'a.nav.clients': 'co', 'a.nav.certs': 'cert', 'a.nav.att': 'att', 'a.nav.pay': 'pay', 'a.nav.leave': 'leave', 'a.nav.notice': 'notice', 'a.nav.survey': 'survey', 'a.nav.content': 'content', 'a.nav.audit': 'audit', 'a.nav.perm': 'perm', 'a.nav.tenant': 'tenant', 'a.nav.reimb': 'reimb', 'a.nav.sys': 'sys', 'a.nav.dep': 'dep', 'a.nav.ptw': 'ptw', 'a.nav.train': 'train', 'a.nav.wallet': 'wallet', 'a.nav.dorm': 'dorm', 'a.nav.spin': 'spin', 'a.nav.kchat': 'kchat' };
   // pages that belong to a Phase 2 module: shown only to tenants whose subscription includes the module
-  const MODULE_PAGES = ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin'];
+  const MODULE_PAGES = ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'];
   // who is looking: the employer's own administrators, or an organisation outside it
   const PARTIES = ['employer', 'subcon', 'maincon', 'training_centre', 'dorm_operator'];
   const EXTERNAL = { subcon: 'sub', maincon: 'main' };   // party -> the company type its accounts must belong to
@@ -39,10 +40,10 @@
     const role = (id, code, name, nameEn, desc, pages, ops, scope, status = 'active', system = false, party = 'employer') => ({ id, code, name, nameEn, desc, status, pages, ops, scope, system, party, updatedAt: '2026-08-10 15:20' });
     const roles = [
       { ...role('r1', 'SUPER_ADMIN', '超级管理员', 'Super administrator', '拥有全部页面、操作与数据', PAGES.map((p) => p.id), allOps(), { kind: 'all', projects: [] }, 'active', true), updatedAt: '2026-08-12 09:00' },
-      role('r2', 'PROJECT_ADMIN', '项目管理员', 'Project administrator', '管理所属项目的人员、考勤与请假', ['stats', 'people', 'prj', 'co', 'cert', 'att', 'leave', 'notice', 'dep', 'ptw', 'train', 'wallet', 'dorm', 'spin'],
-        pick({ stats: ['view', 'export'], people: ['view', 'create', 'update', 'export'], prj: ['view', 'update'], co: ['view'], cert: ['view', 'create', 'update', 'export'], att: ['view', 'update', 'export'], leave: ['view', 'update', 'export', 'approve'], notice: ['view', 'create'], dep: ['view', 'create', 'update', 'export', 'approve'], ptw: ['view', 'create', 'update', 'export', 'approve'], train: ['view', 'create', 'update', 'export', 'approve'], wallet: ['view', 'create', 'update', 'export', 'approve'], dorm: ['view', 'create', 'update', 'export', 'approve'], spin: ['view', 'create', 'update', 'export', 'approve'] }), { kind: 'projects', projects: ['raffles', 'maritime'] }),
+      role('r2', 'PROJECT_ADMIN', '项目管理员', 'Project administrator', '管理所属项目的人员、考勤与请假', ['stats', 'people', 'prj', 'co', 'cert', 'att', 'leave', 'notice', 'dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'],
+        pick({ stats: ['view', 'export'], people: ['view', 'create', 'update', 'export'], prj: ['view', 'update'], co: ['view'], cert: ['view', 'create', 'update', 'export'], att: ['view', 'update', 'export'], leave: ['view', 'update', 'export', 'approve'], notice: ['view', 'create'], dep: ['view', 'create', 'update', 'export', 'approve'], ptw: ['view', 'create', 'update', 'export', 'approve'], train: ['view', 'create', 'update', 'export', 'approve'], wallet: ['view', 'create', 'update', 'export', 'approve'], dorm: ['view', 'create', 'update', 'export', 'approve'], spin: ['view', 'create', 'update', 'export', 'approve'], kchat: ['view', 'create', 'update', 'delete', 'export', 'approve'] }), { kind: 'projects', projects: ['raffles', 'maritime'] }),
       role('r3', 'FINANCE_ADMIN', '财务管理员', 'Finance administrator', '核对并发放工资、审核报销', ['stats', 'pay', 'reimb', 'wallet'], pick({ stats: ['view', 'export'], pay: ['view', 'update', 'export', 'approve'], reimb: ['view', 'export', 'approve'], wallet: ['view', 'export', 'approve'] }), { kind: 'company', projects: [] }),
-      role('r4', 'HR_ADMIN', '人事专员', 'HR officer', '维护人员档案、证书与请假额度', ['people', 'cert', 'att', 'leave', 'survey', 'dep', 'ptw', 'train', 'wallet', 'dorm', 'spin'], pick({ people: ['view', 'create', 'update', 'delete', 'export'], cert: ['view', 'create', 'update', 'export'], att: ['view', 'export'], leave: ['view', 'update', 'export'], survey: ['view', 'create', 'update'], dep: ['view', 'export'], ptw: ['view', 'export'], train: ['view', 'export'], wallet: ['view', 'export'], dorm: ['view', 'export'], spin: ['view', 'export'] }), { kind: 'all', projects: [] }),
+      role('r4', 'HR_ADMIN', '人事专员', 'HR officer', '维护人员档案、证书与请假额度', ['people', 'cert', 'att', 'leave', 'survey', 'dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'], pick({ people: ['view', 'create', 'update', 'delete', 'export'], cert: ['view', 'create', 'update', 'export'], att: ['view', 'export'], leave: ['view', 'update', 'export'], survey: ['view', 'create', 'update'], dep: ['view', 'export'], ptw: ['view', 'export'], train: ['view', 'export'], wallet: ['view', 'export'], dorm: ['view', 'export'], spin: ['view', 'export'], kchat: ['view', 'export'] }), { kind: 'all', projects: [] }),
       role('r5', 'SUBCON_USER', '分包商用户', 'Subcontractor user', '分包商：查看自己的工人、申请部署到总包商工地', ['dep', 'ptw', 'train', 'dorm'], { dep: ['view', 'create', 'update'], ptw: ['view', 'create', 'update'], train: ['view', 'create', 'update'], dorm: ['view', 'create', 'update'] }, { kind: 'company', projects: [] }, 'active', false, 'subcon'),
       role('r6', 'MAINCON_USER', '总包商用户', 'Main contractor user', '总包商：确认分包商工人上场、管理闸机准入（不可见工资）', ['dep', 'ptw'], { dep: ['view', 'update', 'approve', 'export'], ptw: ['view', 'update', 'approve', 'export'] }, { kind: 'company', projects: [] }, 'active', false, 'maincon'),
     ];

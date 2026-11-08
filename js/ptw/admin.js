@@ -6,10 +6,10 @@
   const P = BS.perm, hr = BS.hr, dep = BS.dep, comp = BS.comp, ptw = BS.ptw;
   const today = () => BS.fmt.now().slice(0, 10);
   const SIZE = 5;
-  const FILTERS = ['', 'stopped', 'inprogress', 'ready', 'requested', 'closed'];
+  const FILTERS = ['', 'stopped', 'hold', 'inprogress', 'ready', 'requested', 'closed'];
 
   BS.registerAdmin({
-    id: 'ptw', nav: 'a.nav.ptw', stores: [hr, comp, dep, ptw],
+    id: 'ptw', nav: 'a.nav.ptw', stores: [hr, comp, dep, ptw, BS.kchat],
     tabs: [{ id: 'list', k: 'ptw.tab' }],
     create(ctx) {
       const t = ctx.t, render = ctx.rerender, toast = ctx.toast; const lang = () => ctx.lang(); const z = () => lang() === 'zh';
@@ -53,10 +53,11 @@
           return x.id.toLowerCase().includes(kw) || x.title.toLowerCase().includes(kw) || siteName(x.siteKey).toLowerCase().includes(kw) || x.team.some((no) => { const e = hr.emp(no); return no.toLowerCase().includes(kw) || (e && (e.name.toLowerCase().includes(kw) || (e.nameEn || '').toLowerCase().includes(kw))); });
         }).sort((a, b) => (+(ptw.state(b) === 'stopped') - +(ptw.state(a) === 'stopped')) || b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
       };
-      const stateTag = (x) => { const s = ptw.state(x); const cls = { requested: 'pending', ready: 'sub-upcoming', inprogress: 'approved', stopped: 'rejected', closed: 'withdrawn', cancelled: 'withdrawn', rejected: 'rejected' }[s]; return html`<span class="a-tag ${cls}">${s === 'stopped' ? html`${icon('warn', 11)} ` : ''}${t('ptw.st.' + s)}</span>`; };
+      const stateTag = (x) => { const s = ptw.state(x); const cls = { requested: 'pending', ready: 'sub-upcoming', inprogress: 'approved', stopped: 'rejected', hold: 'rejected', closed: 'withdrawn', cancelled: 'withdrawn', rejected: 'rejected' }[s]; return html`<span class="a-tag ${cls}">${s === 'stopped' || s === 'hold' ? html`${icon('warn', 11)} ` : ''}${t('ptw.st.' + s)}</span>`; };
 
       // ---------- list ----------
       function reasonList(w) { return html`<ul class="dp-reasons">${w.reasons.map((r) => html`<li class="bad">${reasonText(r)}</li>`)}</ul>`; }
+      const holdPanel = (x) => html`<div class="pt-stop pt-hold" data-role="hold"><div class="pt-stop-h"><b>${icon('warn', 16)} ${t('ptw.hold.title', { n: ptw.hold(x).length })}</b></div><p class="pt-stop-p">${t('ptw.hold.msg')}</p><ul class="kc-dgl">${ptw.hold(x).map((c) => html`<li><b>${c.id}</b> ${c.title} <small class="mute">${c.loc}</small></li>`)}</ul><button type="button" class="a-link" data-act="ptw-kchat">${t('ptw.kcOpen')}</button></div>`;
       function stopPanel(x) {
         const ov = ptw.overrideActive(x); const edit = ownsEdit(x) && can('update'); const st = x.stop;
         return html`<div class="pt-stop" data-role="stop"><div class="pt-stop-h">${icon('warn', 16)} <b>${t('ptw.stop.title', { n: st.workers.length })}</b>${ov ? html`<span class="a-tag pending">${t('ptw.stop.overridden')}</span>` : ''}</div>
@@ -71,11 +72,12 @@
       function card(x) {
         const s = ptw.state(x); const res = ptw.check(x); const as = hr.emp(x.assessor); const hrs = ptw.hours(x);
         const act = (a, label, cls = '') => html`<button type="button" class="a-btn sm ${cls}" data-act="${a}" data-id="${x.id}">${label}</button>`;
-        return html`<article class="a-card pt-card ${s === 'stopped' ? 'stop' : ''}" data-ptw="${x.id}" data-state="${s}">
+        return html`<article class="a-card pt-card ${s === 'stopped' || s === 'hold' ? 'stop' : ''}" data-ptw="${x.id}" data-state="${s}">
           <header class="pt-h"><div class="pt-tags"><span class="pt-id">${x.id}</span><span class="a-tag sub-upcoming">${typeName(x.type)}</span>${stateTag(x)}</div><button type="button" class="a-link" data-act="ptw-view" data-id="${x.id}">${icon('search', 14)} ${t('ptw.view')}</button></header>
           <h3 class="pt-title">${x.title}</h3>
+          ${BS.kchat && BS.kchat.permitCards(x.id).length ? html`<p class="pt-kc" data-role="kc-cards">${icon('warn', 13)} ${t('ptw.kcards', { n: BS.kchat.permitCards(x.id).length })} <button type="button" class="a-link" data-act="ptw-kchat">${t('ptw.kcOpen')}</button></p>` : ''}
           <p class="pt-meta">${icon('pin', 13)} ${prjName(x.projectKey)} · ${siteName(x.siteKey)}${x.mainconId ? ' · ' + coName(x.mainconId) : ''} <span class="mute">·</span> ${icon('clock', 13)} ${x.date} ${t('ptw.shift.' + x.shift)} (${hrs[0]}–${hrs[1]}) <span class="mute">·</span> ${t('ptw.ra')}: <code>${x.raRef}</code></p>
-          ${s === 'stopped' ? stopPanel(x) : ''}
+          ${s === 'stopped' ? stopPanel(x) : ''}${s === 'hold' || (s === 'requested' && ptw.hold(x).length) ? holdPanel(x) : ''}
           <div class="pt-team"><span class="mute">${t('ptw.team', { n: x.team.length })}</span>${res.workers.map((w) => { const e = empOf(w.empNo); return html`<span class="pt-chip ${w.ok ? (w.warnings.length ? 'warn' : 'ok') : 'bad'}" title="${w.reasons.concat(w.warnings).map(reasonText).join('；')}">${nm(e)}</span>`; })}
             <span class="pt-asr mute">${t('ptw.assessor')}: <b>${nm(as)}</b>${x.lastInspected ? html` · ${t('ptw.inspected')}: ${x.lastInspected}` : ''}</span></div>
           <footer class="pt-act">
@@ -93,7 +95,7 @@
             <div class="a-tbtns"><button type="button" class="a-btn" data-act="ptw-export">${icon('upload', 16)} ${t('hr.export')}</button>${can('create') && p !== 'maincon' ? html`<button type="button" class="a-btn primary" data-act="ptw-new">${icon('plus', 16)} ${t('ptw.new')}</button>` : ''}</div></div>
           <p class="pt-rule" role="note">${icon('shield', 14)} <span><b>${t('ptw.rule.h')}</b> ${t('ptw.rule.b')}</span></p>
           ${k.stopped ? html`<div class="pt-banner" data-role="banner">${icon('warn', 18)}<div><b>${t('ptw.banner', { n: k.stopped })}</b><small>${t('ptw.banner.sub')}</small></div><button type="button" class="a-btn sm" data-act="ptw-filter" data-s="stopped">${t('ptw.banner.btn')}</button></div>` : ''}
-          <div class="dp-kpis">${[['open', 'active', 'ptw.k.open'], ['stopped', 'blocked', 'ptw.k.stopped'], ['inprogress', 'granted', 'ptw.k.inprogress'], ['badWorkers', 'requested', 'ptw.k.bad']].map(([key, cls, lab]) => html`<div class="dp-kpi ${cls}"><b>${k[key]}</b><span>${t(lab)}</span></div>`)}</div>
+          <div class="dp-kpis">${[['open', 'active', 'ptw.k.open'], ['stopped', 'blocked', 'ptw.k.stopped'], ['hold', 'blocked', 'ptw.k.hold'], ['inprogress', 'granted', 'ptw.k.inprogress'], ['badWorkers', 'requested', 'ptw.k.bad']].map(([key, cls, lab]) => html`<div class="dp-kpi ${cls}"><b>${k[key]}</b><span>${t(lab)}</span></div>`)}</div>
           <section class="a-card pt-bar"><form class="a-filters" autocomplete="off"><label class="a-in a-search">${icon('search', 16)}<input data-f="kw" value="${D.draft.kw}" placeholder="${t('ptw.f.kw')}" aria-label="${t('ptw.f.kw')}"></label><span class="a-fgrow"></span><button type="submit" class="a-btn primary">${t('a.f.query')}</button></form>
             <div class="hr-chips pt-filters" role="group">${FILTERS.map((key) => html`<button type="button" class="${D.f.state === key ? 'on' : ''}" data-act="ptw-filter" data-s="${key}" aria-pressed="${D.f.state === key ? 'true' : 'false'}">${t(key ? 'ptw.st.' + key : 'dep.f.all')} (${cnt(key)})</button>`)}</div></section>
           ${slice.length ? slice.map(card) : html`<section class="a-card"><div class="a-none"><p>${t('ptw.none')}</p></div></section>`}
@@ -177,7 +179,7 @@
 
       // ---------- actions ----------
       const blank = () => ({ type: '', title: '', projectKey: '', siteKey: '', mainconId: '', subconId: party() === 'subcon' && org() ? org().id : '', date: today(), shift: 'day', raRef: '', assessor: '', team: [] });
-      const FLOW_ERR = { not_fit: 'ptw.t.notFit', stopped: 'ptw.t.stopped', not_today: 'ptw.t.notToday', state: 'ptw.t.stale', missing: 'ptw.t.stale', not_overridable: 'ptw.t.noOverride', not_stopped: 'ptw.t.stale' };
+      const FLOW_ERR = { not_fit: 'ptw.t.notFit', hold: 'ptw.t.hold', stopped: 'ptw.t.stopped', not_today: 'ptw.t.notToday', state: 'ptw.t.stale', missing: 'ptw.t.stale', not_overridable: 'ptw.t.noOverride', not_stopped: 'ptw.t.stale' };
       function flow(r, okMsg) {
         if (r.ok) { D.modal = null; render(); toast(t(okMsg), 'ok'); return true; }
         if (r.error === 'note') { D.modal.errs = { note: 'note' }; render(); return false; }
@@ -221,6 +223,7 @@
             case 'ptw-filter': D.f.state = b.dataset.s; D.page = 1; render(); break;
             case 'ptw-export': exportCsv(); break;
             case 'ptw-view': D.modal = { k: 'view', id }; render(); break;
+            case 'ptw-kchat': if (!ctx.go('kchat', {})) toast(t('pm.noOp'), 'warn'); break;
             case 'ptw-new': D.modal = { k: 'form', f: blank(), errs: {} }; render(); break;
             case 'ptw-new-ok': { const M = D.modal; if (p === 'subcon' && org()) M.f.subconId = org().id; const r = ptw.create(M.f); if (!r.ok) { M.errs = r.errors; render(); const first = ctx.view().querySelector('[data-err]'); if (first) first.scrollIntoView({ block: 'center' }); break; } D.modal = null; D.f.state = ''; render(); toast(t('ptw.t.created', { id: r.permit.id }), 'ok'); break; }
             case 'ptw-approve': flow(ptw.approve(id), 'ptw.t.approved'); break;

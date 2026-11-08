@@ -1,6 +1,6 @@
 /* Tenants and their subscriptions (seats, price, period, renewal and seat-change history) + derived user provisioning data. */
 (function (BS) {
-  const KEY = 'bs_tenant_proto_v6';
+  const KEY = 'bs_tenant_proto_v7';
   const SOON_DAYS = 30;                       // "即将到期" = ends within this many days
   const MAX_SEATS = 100000, MAX_PRICE_CENTS = 100000000, MAX_YEARS = 10;
   const listeners = new Set();
@@ -47,8 +47,9 @@
     { id: 'wallet', zh: '激励与钱包', en: 'Incentives & wallets', ready: true },
     { id: 'dorm', zh: '宿舍床位', en: 'Dormitory hub', ready: true },
     { id: 'spin', zh: '转转乐', en: 'Spin & win', ready: true },
+    { id: 'kchat', zh: '现场群聊看板', en: 'Site chat & Kanban', ready: true },
   ];
-  const DEFAULT_MODULES = { 'ten-xinghan': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin'], 'ten-huazhu': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin'] };
+  const DEFAULT_MODULES = { 'ten-xinghan': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'], 'ten-huazhu': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'] };
 
   function seed() {
     const tenants = TENANTS.map(([id, customerId, name, account, status, createdAt, total, active, color]) => ({ id, customerId, name, account, status, createdAt, total, active, color, logo: null, modules: (DEFAULT_MODULES[id] || []).slice() }));

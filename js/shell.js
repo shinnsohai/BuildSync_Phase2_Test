@@ -13,7 +13,7 @@
     ['overview', [['chart', 'a.nav.stats']]],
     ['people', [['users', 'a.nav.people'], ['folder', 'a.nav.projects'], ['brief', 'a.nav.clients'], ['cert', 'a.nav.certs']]],
     ['timepay', [['cal', 'a.nav.att'], ['cal2', 'a.nav.leave'], ['wallet', 'a.nav.pay'], ['receipt', 'a.nav.reimb']]],
-    ['site', [['pin', 'a.nav.dep'], ['warn', 'a.nav.ptw']]],
+    ['site', [['pin', 'a.nav.dep'], ['warn', 'a.nav.ptw'], ['mega', 'a.nav.kchat']]],
     ['welfare', [['cap', 'a.nav.train'], ['tag', 'a.nav.wallet'], ['gift', 'a.nav.spin'], ['home', 'a.nav.dorm']]],
     ['engage', [['bell', 'a.nav.notice'], ['clip', 'a.nav.survey'], ['list', 'a.nav.content']]],
     ['system', [['shield', 'a.nav.audit'], ['user', 'a.nav.perm'], ['tag', 'a.nav.tenant'], ['gear', 'a.nav.sys']]],

@@ -111,7 +111,7 @@
       else if (base === 2) verdict = crewF.length && crewF.every(roleNo) && !permitF.length ? 'ask_move_or_cover' : 'cover';
       else verdict = crewF.every(roleNo) && crewF.length ? 'decline' : 'hold';
       const suggest = base >= 2 && !sick ? nearest(r.empNo, from, to, r.id) : null;
-      return { id: r.id, empNo: r.empNo, type: r.type, from, to, group: ev.group, roles: ev.roles, days: ev.days, findings: ev.findings, level, baseLevel: base, levelName: NAME[level], verdict, candidates: cands, questions, answers, suggest, sick, name: e ? e.name : r.empNo };
+      return { id: r.id, empNo: r.empNo, type: r.type, from, to, group: ev.group, roles: ev.roles, days: ev.days, findings: ev.findings, level, baseLevel: base, levelName: NAME[level], verdict, candidates: cands, questions, answers, suggest, sick, name: e ? e.name : r.empNo, openCards: BS.kchat && ev.group ? BS.kchat.openCount('g:' + ev.group.id) : 0 };
     },
     /** the facts an LLM would be given for this request: no ID numbers, phones or addresses */
     context(id) {

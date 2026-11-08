@@ -147,7 +147,7 @@
       }
 
       // ---------- events ----------
-      const EV_TYPES = ['employee.*', 'cert.*', 'leave.*', 'deployment.*', 'compliance.*', 'ptw.*', 'training.*', 'wallet.*', 'dorm.*', 'spin.*'];
+      const EV_TYPES = ['employee.*', 'cert.*', 'leave.*', 'deployment.*', 'compliance.*', 'ptw.*', 'training.*', 'wallet.*', 'dorm.*', 'spin.*', 'kchat.*'];
       function eventsPage() {
         const log = BS.bus.log(60, D.ev.type ? [D.ev.type] : undefined);
         const sum = (p) => Object.entries(p).map(([k, v]) => `${k}=${Array.isArray(v) ? v.length + ' items' : v}`).join(' · ');

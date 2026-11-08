@@ -74,3 +74,5 @@
 /* Leave Check card on the phone */
 .w-lc { display: grid; gap: 6px; margin-top: 10px; border-left: 4px solid #1f9d63 !important; } .w-lc.warn { border-left-color: #e0a100 !important; } .w-lc.bad { border-left-color: #d64545 !important; } .w-lc p { margin: 0; font-size: 12.5px; line-height: 1.6; } .w-lc-adv { font-weight: 600; } .w-lc small { color: var(--w-muted); }
 .w-lc-h { display: flex; gap: 8px; align-items: center; } .w-lc-ai { display: inline-flex; gap: 3px; align-items: center; padding: 1px 8px; border-radius: 999px; background: #5058f2; color: #fff; font-size: 10.5px; font-weight: 700; }
+
+.lc-oc { color: #b32d2d; font-weight: 600; }
