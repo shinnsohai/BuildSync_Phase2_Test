@@ -74,15 +74,6 @@
   W(BS.comp, 'savePermit', { module: 'deployment', type: 'update', object: (a) => { const p = BS.comp.permitType(a[0]); return p ? o(`作业证书要求 ${p.zh}`, `Certificates for ${p.en}`) : null; } });
   W(BS.tenant, 'setModules', { module: 'tenant', type: 'update', object: (a) => o(`租户模块 ${tnObj(a[0]).zh}`, `Tenant modules ${tnObj(a[0]).zh}`) });
   // ----- 工作许可 -----
-  const ptObj = (id) => { const x = BS.ptw.get(id); return x ? o(`工作许可 ${x.id} ${x.title}`, `Permit ${x.id} ${x.title}`) : o(String(id)); };
-  W(BS.ptw, 'create', { module: 'ptw', type: 'create', object: (a, r) => (r && r.permit ? ptObj(r.permit.id) : null) });
-  W(BS.ptw, 'approve', { module: 'ptw', type: 'approve', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'reject', { module: 'ptw', type: 'reject', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'start', { module: 'ptw', type: 'update', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'close', { module: 'ptw', type: 'complete', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'cancel', { module: 'ptw', type: 'cancel', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'swap', { module: 'ptw', type: 'update', object: (a) => ptObj(a[0]) });
-  W(BS.ptw, 'override', { module: 'ptw', type: 'adjust', object: (a) => ptObj(a[0]) });
   W(hr, 'setDocExpiry', { module: 'people', type: 'update', object: (a) => empObj(a[0]) });
   // ----- 培训预订 -----
   const TR = BS.train; const bkObj = (id) => { const b = TR.request(id); return b ? o(`培训报名 ${b.id} ${b.title}`, `Enrolment ${b.id} ${b.title}`) : o(String(id)); };
@@ -119,29 +110,6 @@
   W(SP, 'recordReferral', { module: 'spin', type: 'create', object: (a, r) => (r && r.referral ? o(`邀请记录 ${r.referral.id}`, `Referral ${r.referral.id}`) : null) });
   W(SP, 'voidReferral', { module: 'spin', type: 'cancel', object: (a) => o(`邀请记录 ${a[0]}`, `Referral ${a[0]}`) });
   // ----- 现场群聊看板 -----
-  const KC = BS.kchat; const kcObj = (id) => { const c = KC.card(id); return c ? o(`看板卡片 ${c.id} ${c.title}`, `Kanban card ${c.id} ${c.title}`) : o(String(id)); };
-  W(KC, 'createCard', { module: 'kchat', type: 'create', object: (a, r) => (r && r.card ? kcObj(r.card.id) : null) });
-  W(KC, 'moveCard', { module: 'kchat', type: 'update', object: (a) => kcObj(a[0]) });
-  W(KC, 'closeCard', { module: 'kchat', type: 'complete', object: (a) => kcObj(a[0]) });
-  W(KC, 'assignCard', { module: 'kchat', type: 'update', object: (a) => kcObj(a[0]) });
-  W(KC, 'saveSettings', { module: 'kchat', type: 'update', object: () => o('关闭证据规则', 'Closure evidence rules') });
-  W(KC, 'updateCard', { module: 'kchat', type: 'update', object: (a) => kcObj(a[0]) });
-  W(KC, 'deleteCard', { module: 'kchat', type: 'delete', before: (id) => KC.card(id) && { ...KC.card(id) }, object: (a, r, b) => (b ? o(`看板卡片 ${b.id} ${b.title}`, `Kanban card ${b.id} ${b.title}`) : null) });
-  W(KC, 'consolidate', { module: 'kchat', type: 'generate', object: () => o('合并所有群聊消息', 'Consolidate all chats') });
-  W(KC, 'digest', { module: 'kchat', type: 'generate', object: (a, r) => (r && r.digest ? o(`每日 EHS 简报 ${r.digest.id} ${r.digest.date}`, `Daily EHS digest ${r.digest.id} ${r.digest.date}`) : null) });
-  W(KC, 'createRoom', { module: 'kchat', type: 'create', object: (a, r) => (r && r.id ? o(`聊天群 ${a[0].nameZh || a[0].nameEn}`, `Chat room ${a[0].nameEn || a[0].nameZh}`) : null) });
-  W(KC, 'updateRoom', { module: 'kchat', type: 'update', object: (a) => o(`聊天群 ${a[0]}`, `Chat room ${a[0]}`) });
-  W(KC, 'appoint', { module: 'kchat', type: 'create', object: (a, r) => (r && r.appointment ? o(`聊天任命 ${r.appointment.id} ${a[0].role}`, `Chat appointment ${r.appointment.id} ${a[0].role}`) : null) });
-  W(KC, 'endAppointment', { module: 'kchat', type: 'update', object: (a) => o(`结束任命 ${a[0]}`, `End appointment ${a[0]}`) });
-  W(KC, 'rejectCard', { module: 'kchat', type: 'reject', object: (a) => kcObj(a[0]) });
-  W(KC, 'spotCheck', { module: 'kchat', type: 'verify', object: (a) => kcObj(a[0]) });
-  W(KC, 'resolveHeld', { module: 'kchat', type: 'update', object: (a) => o(`待确认消息 ${a[0]}`, `Held message ${a[0]}`) });
-  W(KC, 'forward', { module: 'kchat', type: 'create', object: (a) => o(`转发消息 ${a[0]}`, `Forwarded message ${a[0]}`) });
-  W(KC, 'pin', { module: 'kchat', type: 'update', object: (a) => o(`置顶消息 ${a[0]}`, `Pinned message ${a[0]}`) });
-  W(KC, 'unpin', { module: 'kchat', type: 'update', object: (a) => o(`取消置顶 ${a[0]}`, `Unpinned message ${a[0]}`) });
-  W(KC, 'addMark', { module: 'kchat', type: 'create', object: (a) => o(`照片标记 ${a[0]}`, `Photo markup ${a[0]}`) });
-  W(KC, 'removeMark', { module: 'kchat', type: 'delete', object: (a) => o(`删除照片标记 ${a[0]}`, `Removed photo markup ${a[0]}`) });
-  W(KC, 'reportHazard', { module: 'kchat', type: 'create', object: (a, r) => (r && r.message ? o(`点选报告 ${r.message.id}`, `Tap report ${r.message.id}`) : null) });
   // ----- 报销审核 -----
   W(BS.store, 'review', { module: 'reimb', type: (a) => (a[1] === 'approve' ? 'approve' : 'reject'), object: (a) => o(`报销单 ${a[0]}`, `Reimbursement ${a[0]}`) });
   // ----- 通知管理 -----

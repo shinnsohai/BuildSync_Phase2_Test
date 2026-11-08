@@ -53,7 +53,7 @@
       if (bad.length) out.findings.push({ kind: 'crew', role, min, critical, work, level: worst, dates: bad.map((b) => b.date), after: lowest, others: [...new Set(bad.flatMap((b) => b.others))], total: crew.filter((m) => hasRole(m, role)).length });
     });
     // permits that list the worker on those days
-    if (BS.ptw) BS.ptw.all().filter((p) => ['approved', 'active'].includes(p.status) && (p.team || []).includes(empNo) && days.includes(p.date)).forEach((p) => out.findings.push({ kind: 'permit', id: p.id, title: p.title, date: p.date, level: 3 }));
+    if (BS.modules.api('ptw')) BS.modules.api('ptw').all().filter((p) => ['approved', 'active'].includes(p.status) && (p.team || []).includes(empNo) && days.includes(p.date)).forEach((p) => out.findings.push({ kind: 'permit', id: p.id, title: p.title, date: p.date, level: 3 }));
     // training the worker is already booked on
     if (BS.train) BS.train.requests().filter((r) => ['requested', 'registered', 'confirmed'].includes(r.status) && r.trainees.includes(empNo) && r.dates.some((d) => days.includes(d))).forEach((r) => out.findings.push({ kind: 'training', id: r.id, title: r.title, from: r.start, to: r.end, level: 2 }));
     out.level = out.findings.reduce((m, f) => Math.max(m, f.level), 0); return out;
@@ -111,7 +111,7 @@
       else if (base === 2) verdict = crewF.length && crewF.every(roleNo) && !permitF.length ? 'ask_move_or_cover' : 'cover';
       else verdict = crewF.every(roleNo) && crewF.length ? 'decline' : 'hold';
       const suggest = base >= 2 && !sick ? nearest(r.empNo, from, to, r.id) : null;
-      return { id: r.id, empNo: r.empNo, type: r.type, from, to, group: ev.group, roles: ev.roles, days: ev.days, findings: ev.findings, level, baseLevel: base, levelName: NAME[level], verdict, candidates: cands, questions, answers, suggest, sick, name: e ? e.name : r.empNo, openCards: BS.kchat && ev.group ? BS.kchat.openCount('g:' + ev.group.id) : 0 };
+      return { id: r.id, empNo: r.empNo, type: r.type, from, to, group: ev.group, roles: ev.roles, days: ev.days, findings: ev.findings, level, baseLevel: base, levelName: NAME[level], verdict, candidates: cands, questions, answers, suggest, sick, name: e ? e.name : r.empNo, openCards: BS.modules.api('kchat') && ev.group ? BS.modules.api('kchat').openCount('g:' + ev.group.id) : 0 };
     },
     /** the facts an LLM would be given for this request: no ID numbers, phones or addresses */
     context(id) {
@@ -121,7 +121,7 @@
         request: { id: r.id, type: r.type, from: r.start, to: r.end, hours: r.hours, reason: r.reason, worker: { ref: r.empNo, roles: e ? [...roles(e)] : [], group: g ? g.id : null } },
         crew: g ? crewOf(g).map((m) => ({ ref: m.empNo, roles: [...roles(m)], days: days.map((d) => { const x = att.day(m.empNo, d); return { d, scheduled: !!x.expected, approvedLeave: away(x), pendingLeave: pendingOn(m.empNo, d, r.id) }; }).filter((x) => x.scheduled) })) : [],
         minimumCover: g ? (RULES[g.id] || []).map(([role, min, critical, work]) => ({ role, min, critical, work: work.en })) : [],
-        permits: BS.ptw ? BS.ptw.all().filter((p) => (p.team || []).includes(r.empNo) && days.includes(p.date) && ['approved', 'active'].includes(p.status)).map((p) => ({ id: p.id, date: p.date, title: p.title })) : [],
+        permits: BS.modules.api('ptw') ? BS.modules.api('ptw').all().filter((p) => (p.team || []).includes(r.empNo) && days.includes(p.date) && ['approved', 'active'].includes(p.status)).map((p) => ({ id: p.id, date: p.date, title: p.title })) : [],
         training: BS.train ? BS.train.requests().filter((q) => q.trainees.includes(r.empNo) && ['requested', 'registered', 'confirmed'].includes(q.status) && q.dates.some((d) => days.includes(d))).map((q) => ({ id: q.id, from: q.start, to: q.end })) : [],
       };
     },

@@ -10,7 +10,7 @@
   const safeUrl = (u) => (/^https?:\/\//i.test(u || '') ? u : '');
 
   BS.registerAdmin({
-    id: 'train', nav: 'a.nav.train', stores: [hr, train, BS.leaveReq, BS.ptw, BS.dep, BS.wallet],
+    id: 'train', nav: 'a.nav.train', stores: [hr, train, BS.leaveReq, ...BS.modules.stores(['ptw']), BS.dep, BS.wallet],
     tabs() { const all = [{ id: 'catalog', k: 'trn.tab.catalog' }, { id: 'matrix', k: 'trn.tab.matrix' }, { id: 'centres', k: 'trn.tab.centres' }, { id: 'compare', k: 'trn.tab.compare' }, { id: 'advisor', k: 'trn.tab.advisor' }, { id: 'requests', k: 'trn.tab.requests' }, { id: 'sources', k: 'trn.tab.sources' }]; return P.party() === 'employer' ? all : all.slice(0, 6); },
     create(ctx) {
       const t = ctx.t, render = ctx.rerender, toast = ctx.toast; const lang = () => ctx.lang(); const z = () => lang() === 'zh';

@@ -53,7 +53,7 @@
     overrideActive(p) { const o = p.stop && p.stop.override; return !!o && o.date === today() && this.canOverride(p); },
     stopped(p) { return !!p.stop && !this.overrideActive(p); },
     /** open Critical safety cards raised in the site chat at this permit's site: one hazard life cycle, so the card and the permit cannot disagree */
-    hold(p) { return BS.kchat && BS.kchat.permitHoldCards ? BS.kchat.permitHoldCards(p) : []; },
+    hold(p) { return BS.modules.collect('ptw.holds', p); },
     /** requested | rejected | cancelled | closed | stopped | hold | ready | inprogress */
     state(p) { if (!['approved', 'active'].includes(p.status)) return p.status; if (this.stopped(p)) return 'stopped'; if (this.hold(p).length) return 'hold'; return p.status === 'active' ? 'inprogress' : 'ready'; },
 

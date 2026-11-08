@@ -11,7 +11,7 @@
   // entries name the administrator by account id (权限管理); the seeded history was written with short names
   const LEGACY = { sys: 'admin', proj: 'ops01', pay: 'finance01', hr: 'hr01', ops01: 'old01' };
   function who(id) { const a = BS.perm.account(id); return a ? { zh: a.name, en: a.nameEn || a.name, ip: a.ip } : { zh: String(id), en: String(id), ip: '' }; }
-  const MODULES = ['people', 'project', 'client', 'cert', 'attendance', 'payroll', 'leave', 'notice', 'survey', 'content', 'tenant', 'reimb', 'system', 'deployment', 'ptw', 'training', 'wallet', 'dorm', 'spin', 'kchat'];
+  const MODULES = ['people', 'project', 'client', 'cert', 'attendance', 'payroll', 'leave', 'notice', 'survey', 'content', 'tenant', 'reimb', 'system', 'deployment', 'training', 'wallet', 'dorm', 'spin', ...BS.modules.auditModules().map((m) => m.id)];
   const TYPES = ['create', 'update', 'delete', 'approve', 'reject', 'enable', 'disable', 'import', 'publish', 'verify', 'pay', 'adjust', 'generate', 'complete', 'renew', 'cancel', 'second', 'block', 'unblock', 'end', 'award', 'deduct', 'reverse', 'redeem', 'confirm'];
 
   function seed() {

@@ -4,6 +4,7 @@
    A card's history and every message are append-only; a safety hazard reported through the chat can flag the permit for that site and earn the reporter the existing hazard-star points. */
 (function (BS) {
   const KEY = 'bs_kchat_proto_v1';
+  const ptw = () => BS.modules.api('ptw');   // optional: a safety card links to a permit only when the permit module is there
   const hr = BS.hr, att = BS.att, bus = BS.bus;
   const listeners = new Set();
   let version = 0;
@@ -82,7 +83,7 @@
       const m = S.msgs.find((x) => x.id === mid); const room = m.roomId; const a = analyse(m.text, m.tag, { media: m.media, room: { locText: '' } });
       const c = { id: 'KC-' + pad(++S.n.c), roomId: room, originMsgId: mid, title: a.title, category: a.category, priority: o.priority || a.priority, status: o.status || a.recommended_column, role: a.assigned_role, loc: a.location_tag, summaryKey: a.summaryKey, summary: '', assignedTo: o.assignedTo || '', by: 'ai', at: m.at, upd: o.upd || m.at, history: [{ at: m.at, by: 'crawler', from: '', to: o.status || a.recommended_column, note: '' }], permitId: '', awarded: false, closure: o.closure || null, dupOf: '' };
       const g = att.groups().find((x) => 'g:' + x.id === room); const t0 = today();
-      if (g && BS.ptw && c.category === 'Safety' && ['High', 'Critical'].includes(c.priority)) { const pm = BS.ptw.all().find((x) => ['approved', 'active'].includes(x.status) && x.siteKey === g.siteKey && x.projectKey === g.projectKey && x.date >= t0 && x.date <= addDays(t0, 1)); if (pm) c.permitId = pm.id; }
+      if (g && ptw() && c.category === 'Safety' && ['High', 'Critical'].includes(c.priority)) { const pm = ptw().all().find((x) => ['approved', 'active'].includes(x.status) && x.siteKey === g.siteKey && x.projectKey === g.projectKey && x.date >= t0 && x.date <= addDays(t0, 1)); if (pm) c.permitId = pm.id; }
       S.cards.push(c); m.cardId = c.id; return c;
     };
     // Tower A day crew
@@ -232,8 +233,8 @@
     openCount(roomId) { return state.cards.filter((c) => c.roomId === roomId && c.status !== 'Resolved').length; },
     /** link a Safety card of high priority to the permit running at the room's site now or tomorrow */
     _permit(c, room) {
-      if (c.category !== 'Safety' || !['High', 'Critical'].includes(c.priority) || !room || !BS.ptw) return;
-      const t0 = today(); const p = BS.ptw.all().find((x) => ['approved', 'active'].includes(x.status) && x.siteKey === room.siteKey && x.projectKey === room.projectKey && x.date >= t0 && x.date <= addDays(t0, 1)); if (p) c.permitId = p.id;
+      if (c.category !== 'Safety' || !['High', 'Critical'].includes(c.priority) || !room || !ptw()) return;
+      const t0 = today(); const p = ptw().all().find((x) => ['approved', 'active'].includes(x.status) && x.siteKey === room.siteKey && x.projectKey === room.projectKey && x.date >= t0 && x.date <= addDays(t0, 1)); if (p) c.permitId = p.id;
     },
     permitCards(permitId) { return state.cards.filter((c) => c.permitId === permitId && c.status !== 'Resolved'); },
     validateCard(d) {

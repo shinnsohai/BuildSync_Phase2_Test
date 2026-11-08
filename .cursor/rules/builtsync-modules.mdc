@@ -1,0 +1,14 @@
+---
+description: How to add or change a BuiltSync module (feature with its own admin page, phone screen and data)
+globs: ["js/**/*.js", "css/**/*.css", "tests/**/*.js", "tools/**/*.js", "docs/**/*.md"]
+alwaysApply: false
+---
+
+Read `AGENTS.md` at the project root first; it is the full instruction set. The short version:
+
+- Make a module with `node tools/new-module.js <id> --domain <account|site|qaqc|platform> --zh <名> --en "<Name>"`; do not copy files by hand.
+- Write against `BS.sdk` only (see `docs/SDK.md`, types in `sdk/builtsync-sdk.d.ts`). Only listed functions exist. Another module only through `BS.sdk.modules.api(id)` (may be `null`) or an extension point.
+- Never edit `index.html`, `js/shell.js`, `js/main.js`, `js/perm/*`, `js/tenant/*`, `js/audit/*`, `js/modules/*` to wire a module (the one exception: add the id to `js/modules/enabled.js`). The manifest wires everything.
+- Rules live in `store.js` with tests in `tests/<id>.test.js`; screens only draw. Every string in both languages. Action names keep `-new`, `-edit`, `-del`, `-approve`, `export`.
+- No top-level `const`/`let` in module files; wrap in `(function (BS) { … })(window.BS)`. Prefix CSS classes with the module id.
+- Run `node tools/verify.js` after each step and report its real output. You cannot see the page: say what you did not check visually.

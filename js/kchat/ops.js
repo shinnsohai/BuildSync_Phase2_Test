@@ -24,6 +24,7 @@
   const ROLE_OF_CAT = { Safety: 'SAFETY_OFFICER', Quality: 'QUALITY_CONTROL', Material: 'SCHEDULER', Progress: 'SUPERVISOR' };
   const APPT_ROLES = ['SAFETY_OFFICER', 'QUALITY_CONTROL', 'SCHEDULER'];
   const MGR = ['KANBAN_OWNER', 'SUPERVISOR', 'SAFETY_OFFICER'];
+  const wallet = () => BS.modules.api('wallet');   // optional: hazard-star points are skipped when the wallet module is absent
 
   /** the tap-driven report: language-free tiles, so a worker never has to write English or Chinese for the system to understand */
   const HAZARDS = [
@@ -231,14 +232,14 @@
     pairCount(reporter, closer, days) { const from = nowMs() - days * 24 * H; return S().cards.filter((c) => c.closure && !c.closure.rejected && c.closure.by === closer && toMs(c.closure.at) >= from && this.reporterOf(c) === reporter).length; },
     _confirm(c, from, actor) {
       const st = S().settings; const note = (n) => { c.awardNote = n; c.history.push({ at: nowStr(), by: 'system', from: '', to: '', note: 'no points: ' + n }); return 0; };
-      if (c.category !== 'Safety' || c.by !== 'ai' || c.awarded || !['High', 'Critical'].includes(c.priority) || !MGR.includes(actor.role) || !BS.wallet) return 0;
+      if (c.category !== 'Safety' || c.by !== 'ai' || c.awarded || !['High', 'Critical'].includes(c.priority) || !MGR.includes(actor.role) || !wallet()) return 0;
       if (this.needsEvidence(c) && !(c.closure && c.closure.evidence.length)) return 0;
       const reporter = this.reporterOf(c); if (!reporter || String(reporter).startsWith('acct:') || reporter === actor.no || MGR.includes(this.roleOfEmp(reporter))) return 0;
-      const rule = BS.wallet.rule('hazard'); if (!rule || !rule.on) return 0;
+      const rule = wallet().rule('hazard'); if (!rule || !rule.on) return 0;
       if (st.pairLimit > 0 && this.pairCount(reporter, actor.no, 30) > st.pairLimit) { c.closure.flags.push('pair'); return note('pair'); }
       if (st.rewardCap > 0 && this.awardsIn(reporter, 7) >= st.rewardCap) return note('cap');
       if (this.rejectedBy(reporter, 30) >= 3) return note('trust');
-      const r = BS.wallet.award(reporter, { ruleId: 'hazard', points: rule.points, reason: `Hazard reported in the site chat and fixed (${c.id})` }, actor.no || 'system'); if (!r.ok) return 0;
+      const r = wallet().award(reporter, { ruleId: 'hazard', points: rule.points, reason: `Hazard reported in the site chat and fixed (${c.id})` }, actor.no || 'system'); if (!r.ok) return 0;
       c.awarded = true; c.awardTo = reporter; c.awardAt = nowStr(); c.awardPts = rule.points; c.awardEntry = r.entry.id; c.history.push({ at: nowStr(), by: 'system', from: '', to: '', note: `+${rule.points} ${reporter}` }); return rule.points;
     },
     /** decide whether this closing goes to a second person: any flag on the evidence, a repeating pair, or the sampled share of safety closures */
@@ -255,7 +256,7 @@
       const why = String(note || '').trim(); if (verdict === 'fail' && (why.length < 5 || why.length > 200)) return { ok: false, error: 'reason' }; if (verdict !== 'pass' && verdict !== 'fail') return { ok: false, error: 'verdict' };
       c.spot = { ...c.spot, state: verdict, by: actor.no || actor.role, decidedAt: nowStr(), note: why }; let clawed = 0;
       if (verdict === 'fail') {
-        if (c.awarded && !c.clawed && c.awardTo && BS.wallet) { const p = Math.min(c.awardPts || 0, BS.wallet.points(c.awardTo)); if (p >= 1) { const r = BS.wallet.deduct(c.awardTo, { points: p, reason: `Spot-check failed: ${c.id}` }, actor.no || 'system'); if (r.ok) { clawed = p; c.clawed = true; } } else c.clawed = true; }
+        if (c.awarded && !c.clawed && c.awardTo && wallet()) { const p = Math.min(c.awardPts || 0, wallet().points(c.awardTo)); if (p >= 1) { const r = wallet().deduct(c.awardTo, { points: p, reason: `Spot-check failed: ${c.id}` }, actor.no || 'system'); if (r.ok) { clawed = p; c.clawed = true; } } else c.clawed = true; }
         const from = c.status; c.status = 'In_Progress'; c.upd = nowStr(); (c.reopened = c.reopened || []).push(c.closure); c.closure = null; c.history.push({ at: nowStr(), by: actor.no || actor.role, from, to: 'In_Progress', note: 'spot-check failed: ' + why }); this._note(c, 'spotfail', actor.no || 'system', {});
       } else c.history.push({ at: nowStr(), by: actor.no || actor.role, from: c.status, to: c.status, note: 'spot-check passed' });
       const ok = I.save(); I.emit({ type: 'card', id }); bus.emit('kchat.card.spot', { id, verdict }); return { ok: true, card: c, clawed, persisted: ok };

@@ -237,7 +237,7 @@
           ${cards.length ? cards.map((c) => cardView(api, c, canMove)) : html`<div class="w-empty">${icon('list', 36)}<p>${t('kc.noCards')}</p></div>`}</div>${sheets(api, r)}`;
     }
     function cardView(api, c, canMove) {
-      const { t, html, icon } = api; const i = kc.COLS.indexOf(c.status); const p = c.permitId && BS.ptw ? BS.ptw.get(c.permitId) : null; const open = c.status !== 'Resolved'; const role = kc.roleOfEmp(me());
+      const { t, html, icon } = api; const i = kc.COLS.indexOf(c.status); const p = c.permitId && BS.modules.api('ptw') ? BS.modules.api('ptw').get(c.permitId) : null; const open = c.status !== 'Resolved'; const role = kc.roleOfEmp(me());
       return html`<article class="kc-card ${P.focus === c.id ? 'focus' : ''}" data-card="${c.id}" style="border-left-color:${COLOR[c.category]}"><div class="kc-ch"><span class="kc-cat" style="background:${COLOR[c.category]}">${t('kc.cat.' + c.category)}</span><span class="kc-pri ${c.priority}">${t('kc.pri.' + c.priority)}</span><small>${c.id}</small></div>
         <b class="kc-ct">${c.title}</b><p class="kc-cl">${icon('pin', 12)} ${c.loc}</p><p class="kc-cs">${cardSummary(api, c)}</p>
         <div class="kc-cf"><span class="kc-role ${c.role}">${t('kc.role.' + c.role)}</span><small>${c.by === 'ai' ? t('kc.byAi') : t('kc.byManual')} · ${c.upd.slice(5, 16).replace('T', ' ')}</small></div>

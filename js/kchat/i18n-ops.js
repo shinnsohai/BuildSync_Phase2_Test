@@ -1,6 +1,8 @@
 /* Strings: site chat accountability layer (owners and due times, proof, intake, rewards, appointments, results). */
 (function (BS) {
   const D = BS.D;
+  // ---- shown on another module's page (the permit card) ----
+  D('kc.ptw.cards', '现场群聊里有 {n} 张未解决的安全卡片关联这张许可', 'Open safety cards from the site chat linked to this permit: {n}'); D('kc.ptw.open', '去看板', 'Open the board');
   // ---- room notices ----
   D('kc.sys.esc1', '⚠ {id} 已超过处理时限，已升级给 {n}（主管）', '⚠ {id} is past its due time. Escalated to {n} (supervisor).');
   D('kc.sys.esc2', '🚨 {id} 严重超时，已升级给 {n}', '🚨 {id} is far past its due time. Escalated to {n}.');

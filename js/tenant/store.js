@@ -41,15 +41,16 @@
   // Phase 2 modules a subscription can include. 'ready' ones exist in the prototype; the rest are listed so the tenant screen shows the roadmap.
   // Phase 1 modules (people, attendance, payroll, leave ...) are part of every subscription.
   const MODULES = [
-    { id: 'dep', zh: '部署与合规', en: 'Deployments & compliance', ready: true },
-    { id: 'ptw', zh: '工作许可（PTW）', en: 'Permit to Work', ready: true },
-    { id: 'train', zh: '培训中心预订', en: 'Training hub', ready: true },
-    { id: 'wallet', zh: '激励与钱包', en: 'Incentives & wallets', ready: true },
-    { id: 'dorm', zh: '宿舍床位', en: 'Dormitory hub', ready: true },
-    { id: 'spin', zh: '转转乐', en: 'Spin & win', ready: true },
-    { id: 'kchat', zh: '现场群聊看板', en: 'Site chat & Kanban', ready: true },
+    { id: 'dep', zh: '部署与合规', en: 'Deployments & compliance', ready: true, order: 10 },
+    { id: 'train', zh: '培训中心预订', en: 'Training hub', ready: true, order: 30 },
+    { id: 'wallet', zh: '激励与钱包', en: 'Incentives & wallets', ready: true, order: 40 },
+    { id: 'dorm', zh: '宿舍床位', en: 'Dormitory hub', ready: true, order: 50 },
+    { id: 'spin', zh: '转转乐', en: 'Spin & win', ready: true, order: 60 },
   ];
-  const DEFAULT_MODULES = { 'ten-xinghan': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'], 'ten-huazhu': ['dep', 'ptw', 'train', 'wallet', 'dorm', 'spin', 'kchat'] };
+  const DEFAULT_MODULES = { 'ten-xinghan': ['dep', 'train', 'wallet', 'dorm', 'spin'], 'ten-huazhu': ['dep', 'train', 'wallet', 'dorm', 'spin'] };
+  // modules that carry a manifest add themselves to the list and to the subscriptions they are on by default
+  BS.modules.tenantModules().forEach((m) => { MODULES.push({ id: m.id, zh: m.zh, en: m.en, ready: m.ready, order: m.order }); m.defaultFor.forEach((tid) => { (DEFAULT_MODULES[tid] = DEFAULT_MODULES[tid] || []).push(m.id); }); });
+  MODULES.sort((a, b) => a.order - b.order);
 
   function seed() {
     const tenants = TENANTS.map(([id, customerId, name, account, status, createdAt, total, active, color]) => ({ id, customerId, name, account, status, createdAt, total, active, color, logo: null, modules: (DEFAULT_MODULES[id] || []).slice() }));

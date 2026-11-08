@@ -13,11 +13,14 @@
     ['overview', [['chart', 'a.nav.stats']]],
     ['people', [['users', 'a.nav.people'], ['folder', 'a.nav.projects'], ['brief', 'a.nav.clients'], ['cert', 'a.nav.certs']]],
     ['timepay', [['cal', 'a.nav.att'], ['cal2', 'a.nav.leave'], ['wallet', 'a.nav.pay'], ['receipt', 'a.nav.reimb']]],
-    ['site', [['pin', 'a.nav.dep'], ['warn', 'a.nav.ptw'], ['mega', 'a.nav.kchat']]],
+    ['site', [['pin', 'a.nav.dep']]],
     ['welfare', [['cap', 'a.nav.train'], ['tag', 'a.nav.wallet'], ['gift', 'a.nav.spin'], ['home', 'a.nav.dorm']]],
     ['engage', [['bell', 'a.nav.notice'], ['clip', 'a.nav.survey'], ['list', 'a.nav.content']]],
     ['system', [['shield', 'a.nav.audit'], ['user', 'a.nav.perm'], ['tag', 'a.nav.tenant'], ['gear', 'a.nav.sys']]],
   ];
+
+  // a module with a manifest puts its own entry in the sidebar, after the entry it names
+  BS.modules.navItems().forEach((it) => { const g = NAV.find(([id]) => id === it.group); if (!g) return; const i = g[1].findIndex(([, k]) => k === it.after); g[1].splice(i >= 0 ? i + 1 : g[1].length, 0, [it.icon, it.label]); });
 
   BS.createAdmin = function (root) {
     const A = { lang: 'zh', mod: 'reimb', collapsed: null, narrow: false, closed: new Set() };

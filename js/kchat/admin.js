@@ -8,7 +8,7 @@
   const clone = (o) => JSON.parse(JSON.stringify(o));
 
   BS.registerAdmin({
-    id: 'kchat', nav: 'a.nav.kchat', stores: [hr, kc, BS.ptw, BS.att, BS.leaveReq],
+    id: 'kchat', nav: 'a.nav.kchat', stores: [hr, kc, ...BS.modules.stores(['ptw']), BS.att, BS.leaveReq],
     tabs: [{ id: 'board', k: 'kca.tab.board' }, { id: 'perf', k: 'kca.tab.perf' }, { id: 'spot', k: 'kca.tab.spot' }, { id: 'chats', k: 'kca.tab.chats' }, { id: 'digest', k: 'kca.tab.digest' }, { id: 'rooms', k: 'kca.tab.rooms' }, { id: 'settings', k: 'kca.tab.settings' }],
     create(ctx) {
       const t = ctx.t, render = ctx.rerender, toast = ctx.toast; const lang = () => ctx.lang(); const z = () => lang() === 'zh';
@@ -61,7 +61,7 @@
           ${cl && cl.rejected ? html`<div class="kc-closure rej" data-role="closure"><b>${icon('x', 12)} ${t('kc.rejectedChip', { r: cl.note })}</b><small>${accName(cl.by)} · ${cl.at.slice(5, 16).replace('T', ' ')}</small></div>` : cl ? html`<div class="kc-closure" data-role="closure"><b>${icon('check', 12)} ${t('kc.closedBy', { n: accName(cl.by), d: cl.at.slice(5, 16).replace('T', ' ') })}</b>${cl.note ? html`<p>${cl.note}</p>` : ''}${cl.evidence.length ? html`<div class="kc-evs">${cl.evidence.map((x, k) => (x.type === 'image' ? html`<button type="button" class="kc-thumb" data-act="kc-ev" data-id="${c.id}" data-k="${k}">${x.data ? html`<img src="${x.data}" alt="${x.name}">` : html`<i>${x.name}</i>`}</button>` : html`<span class="kc-file">${icon('file', 12)} ${x.name}</span>`))}</div>` : html`<p class="kc-noev">${t('kc.noEvidence')}</p>`}${(cl.flags || []).filter((f) => FLAGCHIPS.includes(f)).length ? html`<div class="kc-pfs">${[...new Set(cl.flags)].filter((f) => FLAGCHIPS.includes(f)).map((f) => html`<i class="kc-pfc warn">${t('kc.pf.' + f)}</i>`)}</div>` : ''}</div>` : c.status === 'Resolved' ? html`<p class="kc-noev">${t('kc.legacy')}</p>` : ''}`;
       }
       function cardView(c, mv) {
-        const r = kc.room(c.roomId); const i = kc.COLS.indexOf(c.status); const p = c.permitId && BS.ptw ? BS.ptw.get(c.permitId) : null; const sender = c.originMsgId && kc.message(c.originMsgId);
+        const r = kc.room(c.roomId); const i = kc.COLS.indexOf(c.status); const p = c.permitId && BS.modules.api('ptw') ? BS.modules.api('ptw').get(c.permitId) : null; const sender = c.originMsgId && kc.message(c.originMsgId);
         return html`<article class="kc-acard ${kc.late().includes(c) ? 'kc-late' : ''}" data-card="${c.id}" style="border-left-color:${COLOR[c.category]}"><div class="kc-ch"><span class="kc-cat" style="background:${COLOR[c.category]}">${t('kc.cat.' + c.category)}</span><span class="kc-pri ${c.priority}">${t('kc.pri.' + c.priority)}</span><small>${c.id}</small></div>
           <b class="kc-ct">${c.title}</b><p class="kc-cl">${icon('pin', 12)} ${c.loc} <span class="mute">· ${roomName(r)}</span></p><p class="kc-cs">${cardSummary(c)}</p>
           <div class="kc-cf"><span class="kc-role ${c.role}">${t('kc.role.' + c.role)}</span><small>${c.by === 'ai' ? t('kc.byAi') : t('kc.byManual')}${sender ? ' · ' + accName(sender.senderNo) : ''} · ${c.upd.slice(5, 16).replace('T', ' ')}</small></div>

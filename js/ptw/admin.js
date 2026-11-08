@@ -9,7 +9,7 @@
   const FILTERS = ['', 'stopped', 'hold', 'inprogress', 'ready', 'requested', 'closed'];
 
   BS.registerAdmin({
-    id: 'ptw', nav: 'a.nav.ptw', stores: [hr, comp, dep, ptw, BS.kchat],
+    id: 'ptw', nav: 'a.nav.ptw', stores: [hr, comp, dep, ptw, ...BS.modules.providerStores('ptw.holds')],
     tabs: [{ id: 'list', k: 'ptw.tab' }],
     create(ctx) {
       const t = ctx.t, render = ctx.rerender, toast = ctx.toast; const lang = () => ctx.lang(); const z = () => lang() === 'zh';
@@ -57,13 +57,13 @@
 
       // ---------- list ----------
       function reasonList(w) { return html`<ul class="dp-reasons">${w.reasons.map((r) => html`<li class="bad">${reasonText(r)}</li>`)}</ul>`; }
-      const holdPanel = (x) => html`<div class="pt-stop pt-hold" data-role="hold"><div class="pt-stop-h"><b>${icon('warn', 16)} ${t('ptw.hold.title', { n: ptw.hold(x).length })}</b></div><p class="pt-stop-p">${t('ptw.hold.msg')}</p><ul class="kc-dgl">${ptw.hold(x).map((c) => html`<li><b>${c.id}</b> ${c.title} <small class="mute">${c.loc}</small></li>`)}</ul><button type="button" class="a-link" data-act="ptw-kchat">${t('ptw.kcOpen')}</button></div>`;
+      const holdPanel = (x) => html`<div class="pt-stop pt-hold" data-role="hold"><div class="pt-stop-h"><b>${icon('warn', 16)} ${t('ptw.hold.title', { n: ptw.hold(x).length })}</b></div><p class="pt-stop-p">${t('ptw.hold.msg')}</p><ul class="kc-dgl">${ptw.hold(x).map((c) => html`<li><b>${c.id}</b> ${c.title} <small class="mute">${c.loc}${c.source ? ' · ' + (lang() === 'zh' ? c.source.zh : c.source.en) : ''}</small></li>`)}</ul>${[...new Map(ptw.hold(x).filter((c) => c.goto).map((c) => [c.goto, c])).values()].map((c) => html`<button type="button" class="a-link" data-act="ptw-goto" data-page="${c.goto}">${t(c.openKey)}</button>`)}</div>`;
       function stopPanel(x) {
         const ov = ptw.overrideActive(x); const edit = ownsEdit(x) && can('update'); const st = x.stop;
         return html`<div class="pt-stop" data-role="stop"><div class="pt-stop-h">${icon('warn', 16)} <b>${t('ptw.stop.title', { n: st.workers.length })}</b>${ov ? html`<span class="a-tag pending">${t('ptw.stop.overridden')}</span>` : ''}</div>
           <p class="pt-stop-p">${t('ptw.stop.msg')}</p>
           ${st.workers.map((w) => { const e = hr.emp(w.empNo); const pe = empOf(w.empNo); const renewable = w.reasons.filter((r) => ['passport', 'pass', 'cert'].includes(r.kind));
-            return html`<div class="pt-bad" data-worker="${w.empNo}"><div><b>${nm(pe)}</b> <span class="mute">(${e ? e.idMask : ''} · ${w.empNo})</span>${reasonList(w)}${w.reasons.filter((r) => r.kind === 'cert').map((r) => { const bk = BS.train && BS.train.pendingFor(w.empNo, r.type); return bk ? html`<p class="pt-booked">${icon('check', 12)} ${t('ptw.refresherBooked', { id: bk.id, d: bk.start })}</p>` : ''; })}</div>
+            return html`<div class="pt-bad" data-worker="${w.empNo}"><div><b>${nm(pe)}</b> <span class="mute">(${e ? e.idMask : ''} · ${w.empNo})</span>${reasonList(w)}${w.reasons.filter((r) => r.kind === 'cert').map((r) => { const bk = BS.modules.api('train') && BS.modules.api('train').pendingFor(w.empNo, r.type); return bk ? html`<p class="pt-booked">${icon('check', 12)} ${t('ptw.refresherBooked', { id: bk.id, d: bk.start })}</p>` : ''; })}</div>
               <div class="pt-bad-act">${edit ? html`<button type="button" class="a-btn sm bad" data-act="ptw-edit-swap" data-id="${x.id}" data-e="${w.empNo}">${t('ptw.swap')}</button>${w.reasons.some((r) => r.kind === 'cert') ? html`<button type="button" class="a-btn sm primary" data-act="ptw-refresher" data-id="${x.id}" data-e="${w.empNo}" data-ty="${w.reasons.find((r) => r.kind === 'cert').type}">${t('ptw.refresher')}</button>` : ''}${renewable.length ? html`<button type="button" class="a-btn sm" data-act="ptw-edit-renew" data-id="${x.id}" data-e="${w.empNo}" data-k="${renewable[0].kind}" data-ty="${renewable[0].type || ''}">${t('ptw.renew')}</button>` : ''}` : ''}</div></div>`; })}
           ${ov ? html`<p class="a-fhint">${t('ptw.stop.ovBy', { n: accName(st.override.by), t: st.override.at, r: st.override.note })}</p>` : ''}
           ${!ov && ptw.canOverride(x) && party() === 'employer' && can('approve') ? html`<div class="pt-stop-ov"><button type="button" class="a-btn sm" data-act="ptw-approve-override" data-id="${x.id}">${t('ptw.override')}</button><small class="a-fhint">${t('ptw.override.hint')}</small></div>` : ''}
@@ -75,7 +75,7 @@
         return html`<article class="a-card pt-card ${s === 'stopped' || s === 'hold' ? 'stop' : ''}" data-ptw="${x.id}" data-state="${s}">
           <header class="pt-h"><div class="pt-tags"><span class="pt-id">${x.id}</span><span class="a-tag sub-upcoming">${typeName(x.type)}</span>${stateTag(x)}</div><button type="button" class="a-link" data-act="ptw-view" data-id="${x.id}">${icon('search', 14)} ${t('ptw.view')}</button></header>
           <h3 class="pt-title">${x.title}</h3>
-          ${BS.kchat && BS.kchat.permitCards(x.id).length ? html`<p class="pt-kc" data-role="kc-cards">${icon('warn', 13)} ${t('ptw.kcards', { n: BS.kchat.permitCards(x.id).length })} <button type="button" class="a-link" data-act="ptw-kchat">${t('ptw.kcOpen')}</button></p>` : ''}
+          ${BS.modules.collect('ptw.related', x).map((r) => html`<p class="pt-kc" data-role="kc-cards">${icon('warn', 13)} ${t(r.labelKey, { n: r.n })} <button type="button" class="a-link" data-act="ptw-goto" data-page="${r.goto}">${t(r.openKey)}</button></p>`)}
           <p class="pt-meta">${icon('pin', 13)} ${prjName(x.projectKey)} · ${siteName(x.siteKey)}${x.mainconId ? ' · ' + coName(x.mainconId) : ''} <span class="mute">·</span> ${icon('clock', 13)} ${x.date} ${t('ptw.shift.' + x.shift)} (${hrs[0]}–${hrs[1]}) <span class="mute">·</span> ${t('ptw.ra')}: <code>${x.raRef}</code></p>
           ${s === 'stopped' ? stopPanel(x) : ''}${s === 'hold' || (s === 'requested' && ptw.hold(x).length) ? holdPanel(x) : ''}
           <div class="pt-team"><span class="mute">${t('ptw.team', { n: x.team.length })}</span>${res.workers.map((w) => { const e = empOf(w.empNo); return html`<span class="pt-chip ${w.ok ? (w.warnings.length ? 'warn' : 'ok') : 'bad'}" title="${w.reasons.concat(w.warnings).map(reasonText).join('；')}">${nm(e)}</span>`; })}
@@ -223,7 +223,7 @@
             case 'ptw-filter': D.f.state = b.dataset.s; D.page = 1; render(); break;
             case 'ptw-export': exportCsv(); break;
             case 'ptw-view': D.modal = { k: 'view', id }; render(); break;
-            case 'ptw-kchat': if (!ctx.go('kchat', {})) toast(t('pm.noOp'), 'warn'); break;
+            case 'ptw-goto': if (!ctx.go(b.dataset.page, {})) toast(t('pm.noOp'), 'warn'); break;
             case 'ptw-new': D.modal = { k: 'form', f: blank(), errs: {} }; render(); break;
             case 'ptw-new-ok': { const M = D.modal; if (p === 'subcon' && org()) M.f.subconId = org().id; const r = ptw.create(M.f); if (!r.ok) { M.errs = r.errors; render(); const first = ctx.view().querySelector('[data-err]'); if (first) first.scrollIntoView({ block: 'center' }); break; } D.modal = null; D.f.state = ''; render(); toast(t('ptw.t.created', { id: r.permit.id }), 'ok'); break; }
             case 'ptw-approve': flow(ptw.approve(id), 'ptw.t.approved'); break;
@@ -239,7 +239,7 @@
             case 'ptw-edit-swap': D.modal = { k: 'swap', id, out: b.dataset.e, f: { in: '' }, errs: {} }; render(); break;
             case 'ptw-edit-swap-ok': { const M = D.modal; if (!M.f.in) { M.errs = { in: 'pick' }; render(); break; } const r = ptw.swap(M.id, M.out, M.f.in); if (!r.ok && (r.error === 'unfit' || r.error === 'candidate')) { M.errs = { in: 'unfit' }; render(); break; } flow(r, 'ptw.t.swapped'); break; }
             case 'ptw-refresher': {
-              const course = BS.train.courseForCert(b.dataset.ty);
+              const course = BS.modules.api('train') && BS.modules.api('train').courseForCert(b.dataset.ty);
               if (!course) { toast(t('trn.t.refresherNone'), 'warn'); break; }
               if (!ctx.go('train', { courseId: course.id, trainees: [b.dataset.e] })) toast(t('pm.noOp'), 'warn');
               break;

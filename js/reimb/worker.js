@@ -51,7 +51,8 @@
 
     function tag(status) { return html`<span class="w-tag ${status}">${t('w.status.' + status)}</span>`; }
 
-    const LIVE = { 'w.tile.reimb': 'open-reimb', 'w.tile.leave': 'open-leave', 'w.tile.att': 'open-att-rec', 'w.tile.salary': 'open-pay', 'w.tile.cert': 'open-cert', 'w.tile.survey': 'open-sv', 'w.tile.wallet': 'open-wl', 'w.tile.train': 'open-trn', 'w.tile.dorm': 'open-dorm', 'w.tile.spin': 'open-spin', 'w.tile.profile': 'open-pass', 'w.tile.chat': 'open-kc' };
+    const LIVE = { 'w.tile.reimb': 'open-reimb', 'w.tile.leave': 'open-leave', 'w.tile.att': 'open-att-rec', 'w.tile.salary': 'open-pay', 'w.tile.cert': 'open-cert', 'w.tile.survey': 'open-sv', 'w.tile.wallet': 'open-wl', 'w.tile.train': 'open-trn', 'w.tile.dorm': 'open-dorm', 'w.tile.spin': 'open-spin', 'w.tile.profile': 'open-pass' };
+    BS.modules.phoneTiles().forEach((x) => { LIVE[x.label] = x.act; });   // tiles of modules with a manifest
     /** bottom tab bar shared by the home and attendance screens */
     function tabbar(active) {
       const tabs = [['home', 'w.tab.home', 'tab-home'], ['brief', 'w.tab.work', 'tab-home'], ['cal', 'w.tab.att', 'open-att'], ['mega', 'w.tab.bc', 'open-bc'], ['gear', 'w.tab.set', 'open-set']];
@@ -59,7 +60,7 @@
     }
     const mePrj = () => { const e = BS.hr.emp(BS.ME.empNo); const a = e && e.assigns[0]; const p = a && BS.hr.project(a.projectKey); return p ? (W.lang === 'zh' ? p.zh : p.en) : t('hr.unassigned'); };
     function homeScreen() {
-      const tiles = [['cal', 'w.tile.att'], ['clip', 'w.tile.survey'], ['wallet', 'w.tile.salary'], ['brief', 'w.tile.leave'], ['user', 'w.tile.profile'], ['receipt', 'w.tile.reimb'], ['cert', 'w.tile.cert'], ['tag', 'w.tile.wallet'], ['cap', 'w.tile.train'], ['home', 'w.tile.dorm'], ['gift', 'w.tile.spin'], ['mega', 'w.tile.chat']];
+      const tiles = [['cal', 'w.tile.att'], ['clip', 'w.tile.survey'], ['wallet', 'w.tile.salary'], ['brief', 'w.tile.leave'], ['user', 'w.tile.profile'], ['receipt', 'w.tile.reimb'], ['cert', 'w.tile.cert'], ['tag', 'w.tile.wallet'], ['cap', 'w.tile.train'], ['home', 'w.tile.dorm'], ['gift', 'w.tile.spin'], ...BS.modules.phoneTiles().map((x) => [x.icon, x.label])];
       const pend = store.mine().filter((c) => c.status === 'pending').length; const certDue = BS.hr.dueReminders(BS.ME.empNo).length;
       return html`
         <div class="w-body">
@@ -70,7 +71,7 @@
           </section>
           ${(() => { const e = BS.hr.emp(BS.ME.empNo); const h = e && !e.assigns.length ? BS.sys.live('unassigned') : null; return h ? html`<section class="w-card w-hint">${icon('bell', 20)}<div><b>${t('w.home.unassignedTitle')}</b><div class="w-notice-body">${BS.raw(BS.notice.clean(W.lang === 'zh' ? h.bodyZh : h.bodyEn))}</div></div></section>` : ''; })()}
           ${BS.content.reminders().length ? html`<div class="w-sec"><h2>${t('w.safety')}</h2></div><div class="w-safety">${BS.content.reminders().map((r) => html`<div class="w-safe" style="background:${r.color}">${r.icon ? html`<img src="${r.icon.data}" alt="">` : html`<span class="w-safe-ic">${icon('shield', 22)}</span>`}<div><b>${W.lang === 'zh' ? r.titleZh : r.titleEn}</b><small>${W.lang === 'zh' ? r.subZh : r.subEn}</small></div></div>`)}</div>` : ''}
-          <div class="w-sec"><h2>${t('w.home.common')}</h2><span>${t('w.home.services', { n: 12 })}</span></div>
+          <div class="w-sec"><h2>${t('w.home.common')}</h2><span>${t('w.home.services', { n: tiles.length })}</span></div>
           <div class="w-grid">${tiles.map(([ic, k]) => html`
             <button type="button" class="w-tile ${LIVE[k] ? 'live' : ''}" data-act="${LIVE[k] || 'inert'}">
               <span class="w-ico-sq lg">${icon(ic, 22)}</span><span>${t(k)}</span>${k === 'w.tile.reimb' && pend ? html`<em class="w-dot">${pend}</em>` : ''}${k === 'w.tile.cert' && certDue ? html`<em class="w-dot">${certDue}</em>` : ''}${k === 'w.tile.survey' && BS.survey.pendingCount(BS.ME.empNo) ? html`<em class="w-dot">${BS.survey.pendingCount(BS.ME.empNo)}</em>` : ''}

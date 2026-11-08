@@ -130,7 +130,7 @@
     }
 
     return {
-      stores: [tr, hr, BS.leaveReq, BS.ptw],
+      stores: [tr, hr, BS.leaveReq, ...BS.modules.stores(['ptw'])],
       screens: { train: main, 'train-course': course, 'train-ask': ask },
       init(api) {
         apiRef = api;

@@ -7,6 +7,7 @@
   const nowStr = () => BS.fmt.now().slice(0, 16);
   const today = () => BS.fmt.now().slice(0, 10);
   const mgr = (role) => role && role !== 'WORKER';
+  const wallet = () => BS.modules.api('wallet');
   const EMOJI_RX = /\p{Extended_Pictographic}|[\u{1F1E6}-\u{1F1FF}]{2}|[0-9#*]️?⃣/u;
   const QUICK = ['👍', '✅', '❤️', '😂', '😮', '🙏'];
   const TPLS = ['site', 'compact', 'minimal', 'full']; const COLORS = ['amber', 'blue', 'green', 'red', 'white'];
@@ -82,7 +83,7 @@
         let today0 = null; try { const x = att.day(no, today(), att.now()); today0 = x.expected ? (x.leaveFull ? 'leave' : x.status === 'missing' ? 'absent' : 'ok') : 'off'; } catch (err) { today0 = null; }
         const days30 = (n) => Date.now() - n * 86400000; const mine = S().cards.filter((c) => this.reporterOf(c) === no);
         out.phone = e.phone; out.today = today0;
-        out.stats = { reports: mine.filter((c) => Date.parse(c.at + ':00') >= days30(30)).length, invalid: this.rejectedBy(no, 30), owned: S().cards.filter((c) => c.status !== 'Resolved' && c.assignedTo === no).length, points: BS.wallet ? BS.wallet.points(no) : 0 };
+        out.stats = { reports: mine.filter((c) => Date.parse(c.at + ':00') >= days30(30)).length, invalid: this.rejectedBy(no, 30), owned: S().cards.filter((c) => c.status !== 'Resolved' && c.assignedTo === no).length, points: wallet() ? wallet().points(no) : 0 };
       }
       return out;
     },

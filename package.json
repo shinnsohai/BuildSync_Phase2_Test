@@ -1,0 +1,13 @@
+{
+  "name": "builtsync-prototype",
+  "private": true,
+  "description": "BuiltSync Phase 2 clickable prototype. No dependencies and no build step: these scripts only run the checks in tools/.",
+  "scripts": {
+    "verify": "node tools/verify.js",
+    "check": "node tools/check-modules.js",
+    "test": "node tools/verify.js --quick",
+    "new-module": "node tools/new-module.js",
+    "serve": "python tools/serve.py 8766"
+  },
+  "engines": { "node": ">=18" }
+}

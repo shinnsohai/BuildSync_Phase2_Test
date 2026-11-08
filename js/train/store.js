@@ -94,7 +94,7 @@
       const out = []; const from = dates[0], to = dates[dates.length - 1];
       const lv = BS.leaveReq && BS.leaveReq.overlap(empNo, `${from}T00:00`, `${to}T23:59`); if (lv) out.push({ kind: 'leave', ref: lv.id, status: lv.status, from: lv.start.slice(0, 10), to: lv.end.slice(0, 10) });
       state.requests.filter((r) => r.id !== excludeId && OPEN.includes(r.status) && r.trainees.includes(empNo) && r.dates.some((d) => dates.includes(d))).forEach((r) => out.push({ kind: 'training', ref: r.id, from: r.start, to: r.end }));
-      if (BS.ptw) BS.ptw.all().filter((p) => ['approved', 'active'].includes(p.status) && p.team.includes(empNo) && dates.includes(p.date)).forEach((p) => out.push({ kind: 'permit', ref: p.id, from: p.date, to: p.date }));
+      if (BS.modules.api('ptw')) BS.modules.api('ptw').all().filter((p) => ['approved', 'active'].includes(p.status) && p.team.includes(empNo) && dates.includes(p.date)).forEach((p) => out.push({ kind: 'permit', ref: p.id, from: p.date, to: p.date }));
       return out;
     },
     analyse(dates, empNos, excludeId) {

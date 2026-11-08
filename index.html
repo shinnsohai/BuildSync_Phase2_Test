@@ -27,13 +27,15 @@
   <link rel="stylesheet" href="css/perm.css">
   <link rel="stylesheet" href="css/sys.css">
   <link rel="stylesheet" href="css/dep.css">
-  <link rel="stylesheet" href="css/ptw.css">
+  <script src="js/modules/registry.js"></script>
+  <script src="js/modules/sdk.js"></script>
+  <script src="js/modules/enabled.js"></script>
   <link rel="stylesheet" href="css/train.css">
   <link rel="stylesheet" href="css/wallet.css">
   <link rel="stylesheet" href="css/dorm.css">
   <link rel="stylesheet" href="css/spin.css">
   <link rel="stylesheet" href="css/passport.css">
-  <link rel="stylesheet" href="css/kchat.css">
+  <script>BS.modules.load('css')</script>
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="css/responsive.css">
 </head>
@@ -92,17 +94,12 @@
   <script src="js/pay/i18n-cpf.js"></script>
   <script src="js/tenant/i18n.js"></script>
   <script src="js/dep/i18n.js"></script>
-  <script src="js/ptw/i18n.js"></script>
   <script src="js/train/i18n.js"></script>
   <script src="js/wallet/i18n.js"></script>
   <script src="js/dorm/i18n.js"></script>
   <script src="js/spin/i18n.js"></script>
   <script src="js/passport/i18n.js"></script>
-  <script src="js/kchat/i18n.js"></script>
-  <script src="js/kchat/i18n-ops.js"></script>
-  <script src="js/kchat/i18n-social.js"></script>
-  <script src="js/kchat/emoji.js"></script>
-  <script src="js/kchat/ui.js"></script>
+  <script>BS.modules.load('i18n')</script>
   <script src="js/reimb/seed.js"></script>
   <script src="js/reimb/store.js"></script>
   <script src="js/hr/seed.js"></script>
@@ -115,7 +112,6 @@
   <script src="js/wire.js"></script>
   <script src="js/comp/store.js"></script>
   <script src="js/dep/store.js"></script>
-  <script src="js/ptw/store.js"></script>
   <script src="js/wallet/store.js"></script>
   <script src="data/atlas.js"></script>
   <script src="js/train/store.js"></script>
@@ -125,9 +121,7 @@
   <script src="js/spin/store.js"></script>
   <script src="js/spin/wheel.js"></script>
   <script src="js/passport/store.js"></script>
-  <script src="js/kchat/store.js"></script>
-  <script src="js/kchat/ops.js"></script>
-  <script src="js/kchat/social.js"></script>
+  <script>BS.modules.load('store')</script>
   <script src="js/payroll/store.js"></script>
   <script src="js/notice/store.js"></script>
   <script src="js/survey/store.js"></script>
@@ -136,6 +130,7 @@
   <script src="js/perm/store.js"></script>
   <script src="js/audit/store.js"></script>
   <script src="js/audit/hooks.js"></script>
+  <script>BS.modules.load('hooks')</script>
   <script src="js/xlsx-lite.js"></script>
   <script src="js/shell.js"></script>
   <script src="js/reimb/worker.js"></script>
@@ -153,7 +148,7 @@
   <script src="js/dorm/worker.js"></script>
   <script src="js/spin/worker.js"></script>
   <script src="js/passport/worker.js"></script>
-  <script src="js/kchat/worker.js"></script>
+  <script>BS.modules.load('phone')</script>
   <script src="js/reimb/admin.js"></script>
   <script src="js/leave/admin.js"></script>
   <script src="js/leave/approvals.js"></script>
@@ -177,12 +172,11 @@
   <script src="js/perm/admin.js"></script>
   <script src="js/sys/admin.js"></script>
   <script src="js/dep/admin.js"></script>
-  <script src="js/ptw/admin.js"></script>
+  <script>BS.modules.load('admin')</script>
   <script src="js/train/admin.js"></script>
   <script src="js/wallet/admin.js"></script>
   <script src="js/dorm/admin.js"></script>
   <script src="js/spin/admin.js"></script>
-  <script src="js/kchat/admin.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
